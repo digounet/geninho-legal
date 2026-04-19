@@ -127,16 +127,12 @@
   .hero-actions {
     display: inline-flex; gap: 26px; align-items: center; flex-wrap: wrap;
   }
+  @media (max-width: 820px) {
+    .hero-actions { display: flex; justify-content: center; }
+  }
   .hero-mascot {
     position: relative;
     display: flex; justify-content: center; align-items: center;
-  }
-  .hero-mascot img {
-    width: 100%;
-    max-width: 420px;
-    height: auto;
-    filter: drop-shadow(0 30px 60px rgba(37, 99, 235, 0.35));
-    animation: float 5s ease-in-out infinite;
   }
   .hero-mascot::before {
     content: "";
@@ -146,10 +142,23 @@
     background: radial-gradient(circle, rgba(37,99,235,0.22) 0%, rgba(37,99,235,0) 65%);
     z-index: 0;
   }
-  .hero-mascot img { position: relative; z-index: 1; }
-  @keyframes float {
-    0%, 100% { transform: translateY(0); }
-    50% { transform: translateY(-12px); }
+  .mascot-stage {
+    position: relative;
+    width: 100%;
+    max-width: 420px;
+    aspect-ratio: 1 / 1;
+    margin: 0 auto;
+    z-index: 1;
+    border-radius: 32px;
+    overflow: hidden;
+    box-shadow: 0 30px 70px rgba(37, 99, 235, 0.28),
+                0 6px 20px rgba(11, 18, 38, 0.18);
+  }
+  .mascot-video {
+    width: 100%;
+    height: 100%;
+    display: block;
+    object-fit: cover;
   }
 
   /* ---------- Highlights strip ---------- */
@@ -460,7 +469,15 @@
         </div>
       </div>
       <div class="hero-mascot reveal">
-        <img src="assets/geninho.png" alt="Geninho, o mascote do app" loading="eager"/>
+        <div class="mascot-stage">
+          <video class="mascot-video"
+                 autoplay muted loop playsinline preload="auto"
+                 poster="assets/geninho.png"
+                 aria-label="Geninho, o mascote do app">
+            <source src="assets/geninho.mp4" type="video/mp4"/>
+            <img src="assets/geninho.png" alt="Geninho, o mascote do app"/>
+          </video>
+        </div>
       </div>
     </div>
   </div>
@@ -469,7 +486,7 @@
 <section class="highlights">
   <div class="container">
     <div class="highlights-grid">
-      <div class="highlight reveal"><strong>OCR inteligente</strong><span>Foto da agenda, grade e conteúdos em segundos.</span></div>
+      <div class="highlight reveal"><strong>Foto que vira agenda</strong><span>Tire foto da grade ou da lista de provas — o app organiza sozinho.</span></div>
       <div class="highlight reveal"><strong>Geninho por IA</strong><span>Mascote que ensina e acompanha, com moderação.</span></div>
       <div class="highlight reveal"><strong>Trilha gamificada</strong><span>Cada matéria vira uma jornada com fases.</span></div>
       <div class="highlight reveal"><strong>Plano adaptativo</strong><span>O app aprende a rotina e ajusta as sugestões.</span></div>
@@ -496,8 +513,8 @@
       </article>
       <article class="feature reveal">
         <div class="ico">📷</div>
-        <h3>OCR com revisão</h3>
-        <p>Tire foto da agenda ou envie PDF — o app estrutura para você.</p>
+        <h3>Agenda por foto ou PDF</h3>
+        <p>Tire foto ou envie um PDF — o app lê e organiza tudo para você conferir.</p>
       </article>
       <article class="feature reveal">
         <div class="ico">🧠</div>
@@ -547,7 +564,7 @@
       <article class="feature reveal">
         <div class="ico">🔥</div>
         <h3>Ritmo de estudo</h3>
-        <p>Streaks e conquistas mantêm o hábito sem pressão excessiva.</p>
+        <p>Sequências de dias estudando e conquistas mantêm o hábito sem pressão.</p>
       </article>
       <article class="feature reveal">
         <div class="ico">▶</div>
@@ -562,12 +579,12 @@
   <div class="container">
     <p class="eyebrow reveal">Conheça o Geninho</p>
     <h2 class="reveal">Mais que um mascote.<br/>Um amigo no estudo.</h2>
-    <p class="lead reveal">O Geninho acompanha o dia a dia com momentos, sons e falas no tempo certo. No Premium, ele também responde dúvidas por IA — sempre com guardrails para proteger a criança.</p>
+    <p class="lead reveal">O Geninho acompanha o dia a dia com momentos, sons e falas no tempo certo. No Premium, ele também tira dúvidas por IA — com filtros que bloqueiam conteúdo inadequado e evitam que ele entregue o gabarito direto.</p>
     <div class="features">
       <article class="feature reveal">
         <div class="ico">💬</div>
         <h3>Mascote presente</h3>
-        <p>Aparece em momentos de conquista, reforço e comeback. Com falas, sons e avatar animado para manter a motivação.</p>
+        <p>Aparece nos momentos certos: quando o filho conquista, precisa de reforço ou volta depois de um tempo sem estudar.</p>
       </article>
       <article class="feature reveal">
         <div class="ico">🤖</div>
@@ -622,11 +639,11 @@
       <article class="feature reveal">
         <div class="ico">📈</div>
         <h3>Domínio por tópico</h3>
-        <p>Cada matéria e cada tópico têm um nível de mastery que evolui a cada quiz e sessão concluída.</p>
+        <p>Cada matéria e cada tópico têm um nível de domínio que evolui a cada quiz e sessão concluída.</p>
       </article>
       <article class="feature reveal">
         <div class="ico">🎯</div>
-        <h3>Boost de prova próxima</h3>
+        <h3>Prioridade na prova próxima</h3>
         <p>À medida que a data da prova se aproxima, os assuntos dela ganham prioridade automática.</p>
       </article>
     </div>
@@ -642,8 +659,8 @@
       <article class="feature reveal"><div class="ico">👥</div><h3>Perfis por papel</h3><p>Experiências dedicadas para responsáveis e estudantes.</p></article>
       <article class="feature reveal"><div class="ico">🧒</div><h3>Preferências individuais</h3><p>Cada criança tem seu ritmo, horário, duração e meta.</p></article>
       <article class="feature reveal"><div class="ico">🏫</div><h3>Ano escolar estruturado</h3><p>Matérias e assuntos organizados para o ano inteiro.</p></article>
-      <article class="feature reveal"><div class="ico">🧾</div><h3>OCR multi-origem</h3><p>Importe por câmera, galeria ou PDF sem complicação.</p></article>
-      <article class="feature reveal"><div class="ico">📚</div><h3>OCR em lote</h3><p>Várias páginas de uma vez, com organização automática.</p></article>
+      <article class="feature reveal"><div class="ico">🧾</div><h3>Importar por foto ou PDF</h3><p>Use a câmera, a galeria ou um arquivo PDF — tudo vira dado organizado.</p></article>
+      <article class="feature reveal"><div class="ico">📚</div><h3>Várias páginas de uma vez</h3><p>Envie várias páginas juntas — o app separa os tópicos para você.</p></article>
       <article class="feature reveal"><div class="ico">🗓️</div><h3>Aulas, atividades e provas</h3><p>Rotina do dia clara, com distinção entre atividade e estudo.</p></article>
       <article class="feature reveal"><div class="ico">🔔</div><h3>Lembretes inteligentes</h3><p>Alertas para prova e lembretes diários de lançamento de nota.</p></article>
       <article class="feature reveal"><div class="ico">🎙️</div><h3>Atalhos com Siri</h3><p>Por voz, aulas de hoje e assuntos da prova por matéria.</p></article>
@@ -652,11 +669,11 @@
       <article class="feature reveal"><div class="ico">♻️</div><h3>Banco de perguntas</h3><p>Perguntas boas voltam para manter o quiz estável.</p></article>
       <article class="feature reveal"><div class="ico">🔀</div><h3>Alternativas embaralhadas</h3><p>Respostas mudam de ordem para evitar decorar posição.</p></article>
       <article class="feature reveal"><div class="ico">🏅</div><h3>Gamificação</h3><p>Conquistas e moedas reforçam o esforço, com supervisão.</p></article>
-      <article class="feature reveal"><div class="ico">📱</div><h3>Multi-dispositivo</h3><p>iPhone, iPad e Apple Watch, com handoff para concluir.</p></article>
-      <article class="feature reveal"><div class="ico">🔐</div><h3>Login seguro</h3><p>Sign in with Apple, Google e Face ID / Touch ID para acesso rápido e protegido.</p></article>
-      <article class="feature reveal"><div class="ico">⚡</div><h3>Live Activity</h3><p>Acompanhe a sessão de estudo em tempo real na tela de bloqueio e Dynamic Island.</p></article>
+      <article class="feature reveal"><div class="ico">📱</div><h3>iPhone, iPad e Apple Watch</h3><p>Comece a sessão no Watch e conclua com segurança no iPhone.</p></article>
+      <article class="feature reveal"><div class="ico">🔐</div><h3>Login seguro</h3><p>Entre com Apple, Google ou usando a própria digital / Face ID.</p></article>
+      <article class="feature reveal"><div class="ico">⚡</div><h3>Acompanhe na tela de bloqueio</h3><p>Durante a sessão de estudo, o tempo restante aparece direto no bloqueio do iPhone.</p></article>
       <article class="feature reveal"><div class="ico">🛡️</div><h3>Moderação automática</h3><p>Perguntas sensíveis são classificadas e ficam disponíveis para o responsável revisar.</p></article>
-      <article class="feature reveal"><div class="ico">🔔</div><h3>Lembretes inteligentes</h3><p>Alertas de prova e lançamento de nota, com boost conforme a data se aproxima.</p></article>
+      <article class="feature reveal"><div class="ico">🔔</div><h3>Lembretes inteligentes</h3><p>Avisos de prova e de lançamento de nota, que ficam mais frequentes conforme a data se aproxima.</p></article>
       <article class="feature reveal"><div class="ico">💳</div><h3>Free e Premium</h3><p>Comece grátis e expanda quando precisar.</p></article>
     </div>
   </div>
@@ -742,7 +759,7 @@
       </div>
       <div class="faq-item reveal">
         <strong>Meus dados estão seguros?</strong>
-        <p>Usamos Sign in with Apple, Google e Face ID / Touch ID. O OCR roda no próprio iPhone — as imagens não saem do dispositivo. Detalhes completos na <a href="/privacidade/" style="color: var(--accent);">Política de Privacidade</a>.</p>
+        <p>Usamos Login com Apple, Google e Face ID / Touch ID. A leitura das fotos da agenda acontece no próprio iPhone — as imagens não saem do seu aparelho. Detalhes completos na <a href="/privacidade/" style="color: var(--accent);">Política de Privacidade</a>.</p>
       </div>
     </div>
   </div>
@@ -771,6 +788,7 @@
 </footer>
 
 <script>
+  // Scroll reveal
   const io = new IntersectionObserver((entries) => {
     entries.forEach(e => {
       if (e.isIntersecting) {
@@ -780,6 +798,21 @@
     });
   }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
   document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+
+  // Loop sem flicker: reinicia o vídeo alguns ms antes do fim para evitar
+  // o "blink" que o browser faz entre o evento `ended` e o seek pro início.
+  (function() {
+    const video = document.querySelector('.mascot-video');
+    if (!video) return;
+    const EPSILON = 0.08; // segundos de margem antes do fim
+    video.addEventListener('timeupdate', () => {
+      if (!video.duration) return;
+      if (video.currentTime >= video.duration - EPSILON) {
+        video.currentTime = 0;
+        video.play();
+      }
+    });
+  })();
 </script>
 
 </body>
