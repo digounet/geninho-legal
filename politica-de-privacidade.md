@@ -1,3 +1,9 @@
+---
+layout: page
+title: Política de Privacidade
+permalink: /politica-de-privacidade.html
+---
+
 # Política de Privacidade — Geninho
 
 **Última atualização:** 19 de abril de 2026
@@ -8,12 +14,11 @@ O **Geninho** é um aplicativo iOS de apoio educacional para famílias brasileir
 Esta Política descreve, em linguagem clara, **quais dados tratamos, por que tratamos, com quem compartilhamos e quais direitos você tem** como titular, em conformidade com a **Lei Geral de Proteção de Dados Pessoais (Lei nº 13.709/2018 — LGPD)** e com as exigências da App Store.
 
 **Controlador dos dados:**
-- Razão social / responsável: *[RAZÃO SOCIAL OU NOME COMPLETO DO DESENVOLVEDOR]*
-- CNPJ / CPF: *[CNPJ ou CPF]*
-- Endereço: *[endereço completo]*
-- Contato (privacidade, DPO, LGPD): **suporte@geninho.app**
+- Responsável: **Pablo Rodrigo (desenvolvedor independente)**
+- Jurisdição: Recife/PE — Brasil
+- Canal de contato para privacidade, LGPD e segurança: **suporte@geninho.app.br**
 
-> ⚠️ Preencher os campos marcados acima antes de publicar.
+Dados de identificação adicionais (documento e endereço completo) podem ser fornecidos mediante solicitação formal e fundamentada, nos termos da LGPD, através do canal de contato acima.
 
 ## 2. Princípios que adotamos
 - **Minimização:** coletamos somente o necessário para o funcionamento do serviço.
@@ -117,7 +122,7 @@ Os dados podem ser tratados em servidores localizados fora do Brasil (principalm
 ## 7. Retenção e exclusão
 - Dados da família, das crianças e de estudos são mantidos **enquanto a conta estiver ativa**.
 - Registros de uso e limites de plano são mantidos pelo ciclo necessário para operar os planos Free e Premium.
-- **Exclusão da conta:** disponível pelo próprio app ("Mais" → excluir conta) ou por e-mail a `suporte@geninho.app`. Após a solicitação, dados pessoais identificáveis são removidos dos sistemas ativos em até **30 dias**, observadas as obrigações legais e limitações técnicas de backups.
+- **Exclusão da conta:** disponível pelo próprio app ("Mais" → excluir conta) ou por e-mail a `suporte@geninho.app.br`. Após a solicitação, dados pessoais identificáveis são removidos dos sistemas ativos em até **30 dias**, observadas as obrigações legais e limitações técnicas de backups.
 - Registros de transações de assinatura podem ser mantidos pelo prazo legal aplicável (fiscal/consumerista) mesmo após a exclusão da conta.
 
 ## 8. Segurança
@@ -151,7 +156,7 @@ Você pode exercer, a qualquer momento, os seguintes direitos:
 8. informação sobre a possibilidade de não fornecer consentimento e suas consequências;
 9. revogação do consentimento.
 
-**Canal para exercer direitos:** `suporte@geninho.app`. Responderemos em até **15 dias** corridos, conforme art. 19 da LGPD.
+**Canal para exercer direitos:** `suporte@geninho.app.br`. Responderemos em até **15 dias** corridos, conforme art. 19 da LGPD.
 
 Caso não obtenha resposta satisfatória, você pode recorrer à **Autoridade Nacional de Proteção de Dados (ANPD)** em [https://www.gov.br/anpd](https://www.gov.br/anpd).
 
@@ -170,8 +175,8 @@ Caso não obtenha resposta satisfatória, você pode recorrer à **Autoridade Na
 Podemos revisar esta Política para refletir mudanças legais, técnicas ou de produto. A versão vigente fica disponível dentro do app (tela **Documentos Legais**) e neste repositório. Alterações materiais serão comunicadas por canal apropriado (aviso no app ou e-mail).
 
 ## 14. Contato
-- E-mail de privacidade / LGPD: **suporte@geninho.app**
-- Encarregado pelo tratamento de dados (DPO): *[nome do encarregado, se aplicável]*
+- E-mail de privacidade / LGPD: **suporte@geninho.app.br**
+- Encarregado pelo tratamento de dados: o canal de contato acima atende às solicitações previstas na LGPD. Por se tratar de operação de pequeno porte conduzida por desenvolvedor independente, aplica-se o tratamento flexibilizado previsto na Resolução CD/ANPD nº 2/2022 para agentes de tratamento de pequeno porte.
 
 ---
 

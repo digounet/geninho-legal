@@ -1,3 +1,9 @@
+---
+layout: page
+title: Transparência e Segurança
+permalink: /transparencia-e-seguranca.html
+---
+
 # Transparência e Segurança — Geninho
 
 **Última atualização:** 28 de março de 2026
@@ -40,4 +46,4 @@ Incidentes relevantes são tratados com prioridade técnica. Quando aplicável, 
 
 ## 8. Canal de contato
 Para dúvidas de segurança e privacidade:
-**suporte@geninho.app**
+**suporte@geninho.app.br**

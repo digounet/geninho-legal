@@ -1,0 +1,12 @@
+title: Geninho — Documentos Legais
+description: Política de Privacidade, Termos de Uso e Transparência do app Geninho
+theme: minima
+lang: pt-BR
+
+header_pages:
+  - politica-de-privacidade.md
+  - termos-de-uso.md
+  - transparencia-e-seguranca.md
+
+plugins:
+  - jekyll-seo-tag

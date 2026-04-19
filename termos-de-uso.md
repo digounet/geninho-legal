@@ -1,3 +1,9 @@
+---
+layout: page
+title: Termos de Uso
+permalink: /termos-de-uso.html
+---
+
 # Termos de Uso — Geninho
 
 **Última atualização:** 28 de março de 2026
@@ -58,4 +64,4 @@ Podemos atualizar estes Termos para refletir mudanças legais, técnicas e de pr
 
 ## 12. Contato
 Dúvidas sobre estes Termos:
-**suporte@geninho.app**
+**suporte@geninho.app.br**
