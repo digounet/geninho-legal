@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Termos de Uso
-permalink: /termos-de-uso.html
+permalink: /termos/
 ---
 
 # Termos de Uso — Geninho

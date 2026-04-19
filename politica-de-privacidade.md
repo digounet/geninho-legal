@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Política de Privacidade
-permalink: /politica-de-privacidade.html
+permalink: /privacidade/
 ---
 
 # Política de Privacidade — Geninho

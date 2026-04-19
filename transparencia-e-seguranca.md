@@ -1,7 +1,7 @@
 ---
 layout: page
 title: Transparência e Segurança
-permalink: /transparencia-e-seguranca.html
+permalink: /transparencia/
 ---
 
 # Transparência e Segurança — Geninho
