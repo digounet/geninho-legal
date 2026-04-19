@@ -3,728 +3,738 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="description" content="Geninho — organização de estudos com IA para famílias. Plano personalizado, quiz validado, Siri e Apple Watch."/>
 <title>Geninho — rotina de estudos mais leve para sua família</title>
 <style>
   :root {
-    --bg: #f4f9ff;
-    --bg-2: #ecf5ff;
-    --surface: #ffffff;
-    --text: #11263f;
-    --muted: #4c657f;
-    --primary: #1a78d6;
-    --primary-dark: #11589e;
-    --green: #1e9f66;
-    --orange: #f28a1a;
-    --line: #d7e5f3;
-    --chip: #eaf3ff;
+    --bg: #fbfbfd;
+    --bg-soft: #f5f5f7;
+    --bg-dark: #000;
+    --bg-dark-soft: #1d1d1f;
+    --text: #1d1d1f;
+    --text-muted: #6e6e73;
+    --text-light: #f5f5f7;
+    --text-light-muted: #a1a1a6;
+    --accent: #0071e3;
+    --accent-hover: #0077ed;
+    --line: rgba(0,0,0,0.08);
+    --line-light: rgba(255,255,255,0.12);
   }
+
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  html { scroll-behavior: smooth; }
+  html { scroll-behavior: smooth; -webkit-font-smoothing: antialiased; }
   body {
-    font-family: "Avenir Next", "Nunito", "Segoe UI", system-ui, -apple-system, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
     color: var(--text);
-    background: linear-gradient(180deg, var(--bg) 0%, #f9fcff 280px, var(--bg) 100%);
-    line-height: 1.6;
+    background: var(--bg);
+    line-height: 1.47059;
+    letter-spacing: -0.015em;
+    font-weight: 400;
+    font-size: 17px;
   }
-  a { color: inherit; }
+  a { color: inherit; text-decoration: none; }
+  img, svg { max-width: 100%; display: block; }
 
-  .container { width: min(1120px, 92vw); margin: 0 auto; }
+  .container { width: 100%; max-width: 1024px; margin: 0 auto; padding: 0 22px; }
 
+  /* ---------- Nav ---------- */
   .nav {
-    position: sticky;
-    top: 0;
-    z-index: 20;
-    backdrop-filter: blur(12px);
-    background: rgba(244, 249, 255, 0.86);
+    position: sticky; top: 0; z-index: 50;
+    backdrop-filter: saturate(180%) blur(20px);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    background: rgba(251, 251, 253, 0.8);
     border-bottom: 1px solid var(--line);
   }
   .nav-inner {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 14px;
-    padding: 12px 0;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 48px; max-width: 1024px; margin: 0 auto; padding: 0 22px;
   }
-  .logo {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    font-weight: 900;
-    font-size: 1.2rem;
+  .logo { display: flex; align-items: center; gap: 8px; font-weight: 600; font-size: 20px; letter-spacing: -0.02em; }
+  .logo-mark {
+    width: 28px; height: 28px; border-radius: 8px;
+    background: linear-gradient(135deg, #0071e3, #38a8f0);
+    display: grid; place-items: center; color: #fff; font-size: 14px; font-weight: 700;
   }
-  .logo-badge {
-    width: 36px;
-    height: 36px;
-    border-radius: 12px;
-    background: linear-gradient(140deg, var(--primary), #38a8f0);
-    color: #fff;
-    display: grid;
-    place-items: center;
-    box-shadow: 0 6px 16px rgba(26, 120, 214, 0.35);
-  }
-  .nav-links {
-    display: flex;
-    align-items: center;
-    gap: 18px;
-    color: var(--muted);
-    font-weight: 700;
-    font-size: 0.92rem;
-  }
-  .btn {
-    border: 0;
-    border-radius: 999px;
-    font-weight: 800;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    cursor: pointer;
-  }
-  .btn-primary {
-    background: linear-gradient(120deg, var(--primary), #38a8f0);
-    color: #fff;
-    padding: 10px 18px;
-    box-shadow: 0 10px 24px rgba(26, 120, 214, 0.25);
-  }
-  .btn-ghost {
-    border: 1px solid #9bc7f0;
-    color: var(--primary-dark);
-    background: #f4faff;
-    padding: 10px 18px;
-  }
+  .nav-links { display: flex; gap: 22px; font-size: 12px; color: var(--text); font-weight: 400; }
+  .nav-links a { opacity: 0.88; transition: opacity 0.2s; }
+  .nav-links a:hover { opacity: 1; }
+  .nav-cta { font-size: 12px; color: var(--accent); font-weight: 500; }
+  @media (max-width: 820px) { .nav-links { display: none; } }
 
+  /* ---------- Buttons ---------- */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    height: 44px; padding: 0 22px; font-size: 17px; font-weight: 400;
+    border-radius: 980px; border: 0; cursor: pointer;
+    transition: all 0.2s ease; letter-spacing: -0.01em;
+    white-space: nowrap;
+  }
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-primary:hover { background: var(--accent-hover); }
+  .btn-ghost {
+    background: transparent; color: var(--accent);
+    padding: 0; height: auto; font-size: 17px;
+  }
+  .btn-ghost::after { content: " ›"; transition: transform 0.2s; display: inline-block; margin-left: 2px; }
+  .btn-ghost:hover::after { transform: translateX(3px); }
+  .btn-light-ghost { background: transparent; color: #2997ff; }
+  .btn-light-ghost::after { content: " ›"; transition: transform 0.2s; display: inline-block; margin-left: 2px; }
+  .btn-light-ghost:hover::after { transform: translateX(3px); }
+
+  /* ---------- Reveal ---------- */
+  .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.8s ease, transform 0.8s ease; }
+  .reveal.in-view { opacity: 1; transform: translateY(0); }
+
+  /* ---------- Hero ---------- */
   .hero {
-    padding: 64px 0 34px;
+    background: var(--bg);
+    padding: 120px 0 80px;
+    text-align: center;
   }
-  .hero-grid {
-    display: grid;
-    grid-template-columns: 1.05fr 0.95fr;
-    gap: 28px;
-    align-items: center;
+  .hero .eyebrow {
+    font-size: 14px; color: var(--text-muted); font-weight: 400;
+    margin-bottom: 8px; letter-spacing: 0;
   }
-  .hero-tag {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 8px 12px;
-    border-radius: 999px;
-    background: var(--chip);
-    color: var(--primary-dark);
-    font-size: 0.84rem;
-    font-weight: 800;
-    margin-bottom: 14px;
+  .hero h1 {
+    font-size: clamp(40px, 7vw, 80px);
+    line-height: 1.05;
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    margin: 0 auto 18px;
+    max-width: 14ch;
   }
-  h1 {
-    font-size: clamp(2rem, 4.1vw, 3.35rem);
-    line-height: 1.12;
-    margin-bottom: 14px;
-  }
-  .hero p {
-    color: var(--muted);
-    font-size: 1.04rem;
-    max-width: 680px;
+  .hero .sub {
+    font-size: clamp(19px, 2.2vw, 24px);
+    font-weight: 400;
+    color: var(--text);
+    max-width: 48ch;
+    margin: 0 auto 32px;
+    line-height: 1.33;
   }
   .hero-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 20px;
+    display: inline-flex; gap: 26px; align-items: center; flex-wrap: wrap; justify-content: center;
   }
 
-  .panel {
-    background: var(--surface);
-    border: 1px solid var(--line);
+  /* ---------- Highlights strip ---------- */
+  .highlights {
+    padding: 80px 0 40px;
+    background: var(--bg);
+  }
+  .highlights-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 16px;
+  }
+  .highlight {
+    background: #fff;
+    border-radius: 18px;
+    padding: 28px 22px;
+    text-align: left;
+  }
+  .highlight strong {
+    font-size: 19px; font-weight: 600; display: block; margin-bottom: 4px;
+    letter-spacing: -0.015em;
+  }
+  .highlight span {
+    font-size: 14px; color: var(--text-muted); line-height: 1.4;
+  }
+
+  /* ---------- Section base ---------- */
+  .section {
+    padding: 120px 0;
+  }
+  .section-light { background: var(--bg); color: var(--text); }
+  .section-soft { background: var(--bg-soft); color: var(--text); }
+  .section-dark { background: var(--bg-dark); color: var(--text-light); }
+
+  .section h2 {
+    font-size: clamp(32px, 4.8vw, 56px);
+    line-height: 1.07;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin-bottom: 14px;
+    max-width: 20ch;
+  }
+  .section .eyebrow {
+    font-size: 14px; color: var(--text-muted); font-weight: 400;
+    margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.05em;
+  }
+  .section-dark .eyebrow { color: var(--text-light-muted); }
+  .section .lead {
+    font-size: clamp(19px, 2vw, 22px);
+    color: var(--text);
+    max-width: 56ch;
+    margin-bottom: 56px;
+    line-height: 1.4;
+  }
+  .section-dark .lead { color: var(--text-light); opacity: 0.85; }
+
+  /* ---------- Feature grid ---------- */
+  .features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 20px;
+  }
+  .feature {
+    background: #fff;
     border-radius: 22px;
-    box-shadow: 0 14px 34px rgba(17, 38, 63, 0.08);
-    overflow: hidden;
+    padding: 36px 28px;
+    transition: transform 0.3s ease;
   }
-  .panel-head {
-    background: linear-gradient(120deg, #1b86e0, #38a8f0);
-    color: #fff;
-    padding: 12px 16px;
-    display: flex;
-    justify-content: space-between;
+  .section-dark .feature {
+    background: var(--bg-dark-soft);
+  }
+  .section-soft .feature { background: #fff; }
+  .feature:hover { transform: translateY(-4px); }
+  .feature .ico {
+    font-size: 32px; line-height: 1; margin-bottom: 20px;
+  }
+  .feature h3 {
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    margin-bottom: 10px;
+    line-height: 1.2;
+  }
+  .feature p {
+    font-size: 16px;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+  .section-dark .feature p { color: var(--text-light-muted); }
+
+  /* ---------- Quiz trail visual ---------- */
+  .showcase {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 60px;
     align-items: center;
-    font-weight: 800;
-    font-size: 0.92rem;
   }
-  .panel-body {
-    padding: 14px;
-    background: linear-gradient(180deg, #fcfeff, #f4f9ff);
+  @media (max-width: 820px) {
+    .showcase { grid-template-columns: 1fr; gap: 40px; }
   }
-  .trail {
-    border-radius: 16px;
-    background: linear-gradient(150deg, #0f2740, #183651);
-    padding: 16px 12px;
+  .showcase h2 { max-width: 16ch; }
+  .trail-card {
+    background: linear-gradient(160deg, #1a1a1c, #0a0a0b);
+    border-radius: 28px;
+    padding: 40px 32px;
+    border: 1px solid var(--line-light);
+    aspect-ratio: 9 / 11;
+    max-width: 420px;
+    margin: 0 auto;
+    display: flex; flex-direction: column; gap: 24px;
+    color: var(--text-light);
+  }
+  .trail-head {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 13px; color: var(--text-light-muted);
+  }
+  .trail-head strong { color: var(--text-light); font-weight: 600; font-size: 15px; }
+  .trail-visual {
+    flex: 1;
+    display: flex; flex-direction: column; align-items: center;
+    justify-content: space-around; padding: 20px 0;
     position: relative;
-    min-height: 250px;
   }
-  .trail-line {
-    position: absolute;
-    left: 50%;
-    top: 24px;
-    bottom: 22px;
-    width: 8px;
+  .trail-visual::before {
+    content: "";
+    position: absolute; top: 10%; bottom: 10%; left: 50%;
+    width: 2px;
+    background: linear-gradient(to bottom, #30d158, #30d158 40%, rgba(255,255,255,0.15) 60%);
     transform: translateX(-50%);
-    border-radius: 999px;
-    background: linear-gradient(180deg, #285f87, #1d4769);
   }
   .node {
-    position: relative;
-    width: 62px;
-    height: 62px;
-    border-radius: 50%;
-    margin: 0 auto 18px;
-    background: #39c15b;
-    border: 4px solid #7ef29a;
-    box-shadow: 0 8px 18px rgba(0,0,0,0.32);
-    display: grid;
-    place-items: center;
-    color: #fff;
-    font-size: 1.25rem;
-    font-weight: 900;
+    width: 64px; height: 64px; border-radius: 50%;
+    display: grid; place-items: center;
+    font-size: 24px;
+    position: relative; z-index: 1;
+    box-shadow: 0 10px 28px rgba(0,0,0,0.5);
   }
-  .node.locked {
-    background: #455e72;
-    border-color: #6b8296;
-  }
-  .node::after {
-    content: "";
-    position: absolute;
-    inset: -9px;
-    border-radius: 50%;
-    border: 6px solid transparent;
-  }
-  .node.done::after {
-    border-top-color: #67ff85;
-    border-right-color: #67ff85;
-    border-bottom-color: #67ff85;
-  }
+  .node.done { background: #30d158; color: #fff; }
+  .node.current { background: #30d158; color: #fff; box-shadow: 0 0 0 6px rgba(48,209,88,0.25), 0 10px 28px rgba(0,0,0,0.5); }
+  .node.locked { background: #3a3a3c; color: #86868b; }
 
-  .stats {
-    margin: 22px 0 34px;
+  /* ---------- Steps ---------- */
+  .steps {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 12px;
-  }
-  .stat {
-    background: var(--surface);
-    border: 1px solid var(--line);
-    border-radius: 16px;
-    padding: 14px;
-    text-align: center;
-  }
-  .stat strong {
-    display: block;
-    font-size: 1.4rem;
-    color: var(--primary-dark);
-  }
-  .stat span {
-    color: var(--muted);
-    font-size: 0.84rem;
-    font-weight: 700;
-  }
-
-  .section {
-    padding: 26px 0 8px;
-  }
-  .section h2 {
-    font-size: clamp(1.45rem, 2.5vw, 2.1rem);
-    margin-bottom: 8px;
-  }
-  .section .lead {
-    color: var(--muted);
-    margin-bottom: 16px;
-    max-width: 760px;
-  }
-
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 14px;
-  }
-  .card {
-    background: var(--surface);
-    border: 1px solid var(--line);
-    border-radius: 16px;
-    padding: 16px;
-    box-shadow: 0 8px 20px rgba(17, 38, 63, 0.05);
-  }
-  .card .icon {
-    width: 36px;
-    height: 36px;
-    border-radius: 10px;
-    display: grid;
-    place-items: center;
-    margin-bottom: 10px;
-    font-size: 1rem;
-    background: #e8f3ff;
-  }
-  .card h3 {
-    font-size: 1rem;
-    margin-bottom: 6px;
-  }
-  .card p {
-    color: var(--muted);
-    font-size: 0.92rem;
-  }
-
-  .flow {
-    margin-top: 8px;
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 10px;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 28px;
   }
   .step {
-    background: var(--surface);
-    border: 1px solid var(--line);
-    border-radius: 14px;
-    padding: 12px;
-    text-align: center;
+    padding: 0;
   }
-  .step strong {
-    display: inline-grid;
-    place-items: center;
-    width: 28px;
-    height: 28px;
-    border-radius: 50%;
-    background: #e8f3ff;
-    color: var(--primary-dark);
-    margin-bottom: 6px;
+  .step .num {
+    font-size: 64px;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.03em;
+    background: linear-gradient(135deg, #0071e3, #38a8f0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 16px;
   }
-  .step p {
-    color: var(--muted);
-    font-size: 0.84rem;
-  }
+  .step p { font-size: 17px; line-height: 1.45; color: var(--text-light); opacity: 0.9; }
 
+  /* ---------- Plans ---------- */
   .plans {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 14px;
-    margin-top: 10px;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
   }
+  @media (max-width: 720px) { .plans { grid-template-columns: 1fr; } }
   .plan {
-    background: var(--surface);
+    background: #fff;
+    border-radius: 28px;
+    padding: 48px 40px;
     border: 1px solid var(--line);
-    border-radius: 16px;
-    padding: 18px;
   }
-  .plan h3 { margin-bottom: 8px; }
-  .plan ul { margin-left: 18px; color: var(--muted); }
-  .plan li { margin-bottom: 6px; }
+  .plan.featured {
+    background: var(--bg-dark);
+    color: var(--text-light);
+    border-color: var(--bg-dark);
+  }
+  .plan h3 {
+    font-size: 32px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+  }
+  .plan .tag {
+    display: inline-block;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--accent);
+    margin-bottom: 24px;
+    font-weight: 500;
+  }
+  .plan.featured .tag { color: #2997ff; }
+  .plan ul { list-style: none; padding: 0; display: grid; gap: 14px; }
+  .plan li {
+    font-size: 17px; line-height: 1.4;
+    display: flex; gap: 12px; align-items: flex-start;
+  }
+  .plan li::before {
+    content: "✓";
+    color: var(--accent);
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+  .plan.featured li::before { color: #2997ff; }
 
+  /* ---------- FAQ ---------- */
   .faq {
-    margin-top: 10px;
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 10px;
+    max-width: 820px; margin: 0 auto;
   }
   .faq-item {
-    background: var(--surface);
-    border: 1px solid var(--line);
-    border-radius: 14px;
-    padding: 14px;
+    border-top: 1px solid var(--line);
+    padding: 28px 0;
   }
+  .faq-item:last-child { border-bottom: 1px solid var(--line); }
   .faq-item strong {
     display: block;
-    margin-bottom: 4px;
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.015em;
+    margin-bottom: 10px;
+    line-height: 1.3;
   }
-  .faq-item p { color: var(--muted); }
-
-  .cta {
-    margin: 28px 0 36px;
-    background: linear-gradient(125deg, #1a78d6, #1e9f66);
-    border-radius: 20px;
-    color: #fff;
-    padding: 22px;
-    display: grid;
-    grid-template-columns: 1.2fr 0.8fr;
-    gap: 12px;
-    align-items: center;
-  }
-  .cta p { opacity: 0.95; }
-  .cta-actions {
-    display: flex;
-    justify-content: flex-end;
-    gap: 10px;
-  }
-  .btn-light {
-    background: #fff;
-    color: #0f477f;
-    padding: 10px 16px;
+  .faq-item p {
+    font-size: 17px;
+    color: var(--text-muted);
+    line-height: 1.5;
   }
 
+  /* ---------- Final CTA ---------- */
+  .final-cta {
+    text-align: center;
+    padding: 120px 0;
+    background: var(--bg-dark);
+    color: var(--text-light);
+  }
+  .final-cta h2 {
+    font-size: clamp(40px, 6vw, 72px);
+    font-weight: 600;
+    letter-spacing: -0.025em;
+    line-height: 1.05;
+    max-width: 16ch;
+    margin: 0 auto 20px;
+  }
+  .final-cta p {
+    font-size: 21px;
+    max-width: 44ch;
+    margin: 0 auto 36px;
+    opacity: 0.85;
+  }
+  .final-cta .btn-primary { background: #2997ff; }
+  .final-cta .btn-primary:hover { background: #0077ed; }
+
+  /* ---------- Footer ---------- */
   footer {
-    border-top: 1px solid var(--line);
-    padding: 18px 0 28px;
-    color: var(--muted);
-    font-size: 0.9rem;
+    background: var(--bg-soft);
+    padding: 40px 0;
+    font-size: 12px;
+    color: var(--text-muted);
   }
-  .footer-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 12px;
-    flex-wrap: wrap;
+  .footer-inner {
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;
   }
-  .footer-links {
-    display: flex;
-    gap: 12px;
-  }
+  .footer-links { display: flex; gap: 22px; flex-wrap: wrap; }
+  .footer-links a { color: var(--text-muted); }
+  .footer-links a:hover { color: var(--text); }
 
-  @media (max-width: 980px) {
-    .hero-grid { grid-template-columns: 1fr; }
-    .stats { grid-template-columns: repeat(2, 1fr); }
-    .grid { grid-template-columns: 1fr 1fr; }
-    .flow { grid-template-columns: 1fr 1fr; }
-    .plans { grid-template-columns: 1fr; }
-    .cta { grid-template-columns: 1fr; }
-    .cta-actions { justify-content: flex-start; }
-  }
-  @media (max-width: 680px) {
-    .nav-links { display: none; }
-    .grid { grid-template-columns: 1fr; }
-    .stats { grid-template-columns: 1fr 1fr; }
-  }
+  /* ---------- Utility ---------- */
+  .text-center { text-align: center; }
+  .mb-0 { margin-bottom: 0; }
 </style>
 </head>
 <body>
-  <nav class="nav">
-    <div class="container nav-inner">
-      <div class="logo">
-        <span class="logo-badge">🧞</span>
-        <span>Geninho</span>
-      </div>
-      <div class="nav-links">
-        <a href="#responsaveis">Responsáveis</a>
-        <a href="#estudantes">Estudantes</a>
-        <a href="#funcionalidades">Funcionalidades</a>
-        <a href="#como-funciona">Como funciona</a>
-        <a href="#planos">Planos</a>
-      </div>
-      <a class="btn btn-primary" href="#download">Baixar</a>
+
+<nav class="nav">
+  <div class="nav-inner">
+    <a class="logo" href="/">
+      <span class="logo-mark">G</span>
+      <span>Geninho</span>
+    </a>
+    <div class="nav-links">
+      <a href="#responsaveis">Responsáveis</a>
+      <a href="#estudantes">Estudantes</a>
+      <a href="#geninho">Geninho</a>
+      <a href="#funcionalidades">Funcionalidades</a>
+      <a href="#planos">Planos</a>
     </div>
-  </nav>
+    <a class="nav-cta" href="#download">Baixar ›</a>
+  </div>
+</nav>
 
-  <section class="hero">
-    <div class="container hero-grid">
+<section class="hero">
+  <div class="container">
+    <p class="eyebrow reveal">Geninho para iPhone, iPad e Apple Watch</p>
+    <h1 class="reveal">A rotina de estudos da sua família, mais leve.</h1>
+    <p class="sub reveal">Organize aulas e atividades em minutos, gere planos com IA e acompanhe o que seu filho realmente aprendeu.</p>
+    <div class="hero-actions reveal" id="download">
+      <a class="btn btn-primary" href="#">Baixar na App Store</a>
+      <a class="btn btn-ghost" href="#como-funciona">Veja como funciona</a>
+    </div>
+  </div>
+</section>
+
+<section class="highlights">
+  <div class="container">
+    <div class="highlights-grid">
+      <div class="highlight reveal"><strong>OCR inteligente</strong><span>Foto da agenda, grade e conteúdos em segundos.</span></div>
+      <div class="highlight reveal"><strong>Geninho por IA</strong><span>Mascote que ensina e acompanha, com moderação.</span></div>
+      <div class="highlight reveal"><strong>Trilha gamificada</strong><span>Cada matéria vira uma jornada com fases.</span></div>
+      <div class="highlight reveal"><strong>Plano adaptativo</strong><span>O app aprende a rotina e ajusta as sugestões.</span></div>
+      <div class="highlight reveal"><strong>Siri + Watch</strong><span>Consultas rápidas no dia a dia.</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="responsaveis" class="section section-light">
+  <div class="container">
+    <p class="eyebrow reveal">Para responsáveis</p>
+    <h2 class="reveal">Visão do todo.<br/>Sem planilhas.</h2>
+    <p class="lead reveal">Rotina, conteúdos estudados e pontos de dificuldade de cada filho — tudo no mesmo lugar.</p>
+    <div class="features">
+      <article class="feature reveal">
+        <div class="ico">👨‍👩‍👧</div>
+        <h3>Cadastro por filho</h3>
+        <p>Ajuste horário, duração, meta do quiz e preferências de forma individual.</p>
+      </article>
+      <article class="feature reveal">
+        <div class="ico">📘</div>
+        <h3>Ano escolar com currículo</h3>
+        <p>Organize matérias e assuntos do jeito da escola do seu filho.</p>
+      </article>
+      <article class="feature reveal">
+        <div class="ico">📷</div>
+        <h3>OCR com revisão</h3>
+        <p>Tire foto da agenda ou envie PDF — o app estrutura para você.</p>
+      </article>
+      <article class="feature reveal">
+        <div class="ico">🧠</div>
+        <h3>Plano com IA</h3>
+        <p>Sugestões realistas considerando provas, histórico e tempo disponível.</p>
+      </article>
+      <article class="feature reveal">
+        <div class="ico">🎁</div>
+        <h3>Recompensas da família</h3>
+        <p>Você define as regras e mantém o controle das recompensas.</p>
+      </article>
+      <article class="feature reveal">
+        <div class="ico">📊</div>
+        <h3>Resumo de progresso</h3>
+        <p>Evolução por matéria, tópicos estudados e onde precisa reforço.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="estudantes" class="section section-dark">
+  <div class="container">
+    <p class="eyebrow reveal">Para estudantes</p>
+    <h2 class="reveal">Estudar fica mais claro.</h2>
+    <p class="lead reveal">O aluno registra o que estudou, responde um quiz objetivo e vê o próprio progresso.</p>
+    <div class="features">
+      <article class="feature reveal">
+        <div class="ico">✅</div>
+        <h3>Conclusão com validação</h3>
+        <p>Antes de concluir, marca os assuntos e responde um quiz.</p>
+      </article>
+      <article class="feature reveal">
+        <div class="ico">🔎</div>
+        <h3>Busca de assuntos</h3>
+        <p>Encontrar conteúdos é rápido, mesmo com variação de escrita.</p>
+      </article>
+      <article class="feature reveal">
+        <div class="ico">🔁</div>
+        <h3>Substituir pergunta</h3>
+        <p>Se algo estiver confuso, ele troca a pergunta e segue sem travar.</p>
+      </article>
+      <article class="feature reveal">
+        <div class="ico">⭐</div>
+        <h3>Moedas por mérito</h3>
+        <p>As moedas chegam com constância e acertos de verdade.</p>
+      </article>
+      <article class="feature reveal">
+        <div class="ico">🔥</div>
+        <h3>Ritmo de estudo</h3>
+        <p>Streaks e conquistas mantêm o hábito sem pressão excessiva.</p>
+      </article>
+      <article class="feature reveal">
+        <div class="ico">▶</div>
+        <h3>YouTube sob controle</h3>
+        <p>Vídeos de apoio aparecem só quando o responsável permitir.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section id="geninho" class="section section-light">
+  <div class="container">
+    <p class="eyebrow reveal">Conheça o Geninho</p>
+    <h2 class="reveal">Mais que um mascote.<br/>Um amigo no estudo.</h2>
+    <p class="lead reveal">O Geninho acompanha o dia a dia com momentos, sons e falas no tempo certo. No Premium, ele também responde dúvidas por IA — sempre com guardrails para proteger a criança.</p>
+    <div class="features">
+      <article class="feature reveal">
+        <div class="ico">💬</div>
+        <h3>Mascote presente</h3>
+        <p>Aparece em momentos de conquista, reforço e comeback. Com falas, sons e avatar animado para manter a motivação.</p>
+      </article>
+      <article class="feature reveal">
+        <div class="ico">🤖</div>
+        <h3>Chat livre por IA <span style="color: var(--accent); font-size: 13px; font-weight: 500; display: inline-block; margin-left: 6px; vertical-align: middle;">Premium</span></h3>
+        <p>Tira dúvidas de estudo, explica conceitos e guia o raciocínio. Nunca entrega gabarito direto — ensina o caminho.</p>
+      </article>
+      <article class="feature reveal">
+        <div class="ico">🛡️</div>
+        <h3>Revisado pelo responsável</h3>
+        <p>Perguntas com conteúdo sensível, inapropriado ou pedido de gabarito ficam sinalizadas no painel do responsável.</p>
+      </article>
+    </div>
+  </div>
+</section>
+
+<section class="section section-dark">
+  <div class="container">
+    <div class="showcase">
       <div>
-        <span class="hero-tag">Novidades de março de 2026</span>
-        <h1>A rotina de estudos da sua família, mais simples e leve.</h1>
-        <p>
-          Com o Geninho, você organiza aulas e atividades em minutos, monta planos com IA
-          e acompanha de perto o que seu filho realmente aprendeu. Agora com atalhos da Siri,
-          lembretes inteligentes de nota e suporte ao Apple Watch para consultas rápidas.
-        </p>
-        <div class="hero-actions" id="download">
-          <a class="btn btn-primary" href="#">App Store</a>
-          <a class="btn btn-ghost" href="#como-funciona">Como funciona na prática</a>
-        </div>
+        <p class="eyebrow reveal">Quiz do Milhão</p>
+        <h2 class="reveal">Uma trilha para cada matéria.</h2>
+        <p class="lead reveal">Fases curtas, feedback imediato e progresso visível. O aluno sabe onde está e o que vem em seguida.</p>
       </div>
-
-      <div class="panel" aria-label="Prévia do Quiz do Milhão em trilha">
-        <div class="panel-head">
-          <span>Quiz do Milhão - Matemática</span>
-          <span>3/10 casinhas</span>
-        </div>
-        <div class="panel-body">
-          <div class="trail">
-            <div class="trail-line"></div>
+      <div class="reveal">
+        <div class="trail-card">
+          <div class="trail-head">
+            <strong>Matemática</strong>
+            <span>3 / 10 casinhas</span>
+          </div>
+          <div class="trail-visual">
             <div class="node done">★</div>
-            <div class="node">▶</div>
+            <div class="node current">▶</div>
             <div class="node locked">🔒</div>
           </div>
         </div>
       </div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <section class="container stats">
-    <div class="stat"><strong>OCR inteligente</strong><span>Foto da agenda, grade e conteúdos em segundos</span></div>
-    <div class="stat"><strong>Quiz com revisão</strong><span>Perguntas mais claras antes de chegar ao aluno</span></div>
-    <div class="stat"><strong>Trilha gamificada</strong><span>Cada matéria vira uma jornada com fases</span></div>
-    <div class="stat"><strong>Meta personalizada</strong><span>Defina o nível de acerto por filho</span></div>
-    <div class="stat"><strong>Siri + Watch</strong><span>Consultas rápidas de aulas e provas no dia a dia</span></div>
-  </section>
-
-  <section id="responsaveis" class="section container">
-    <h2>Para responsáveis</h2>
-    <p class="lead">
-      Você tem visão do todo sem planilhas: rotina, conteúdos estudados e pontos de dificuldade de cada filho.
-    </p>
-    <div class="grid">
-      <article class="card">
-        <div class="icon">👨‍👩‍👧</div>
-        <h3>Cadastro completo por filho</h3>
-        <p>Ajuste horário, duração, meta do quiz e preferências de forma individual.</p>
+<section class="section section-light">
+  <div class="container">
+    <p class="eyebrow reveal">Inteligência adaptativa</p>
+    <h2 class="reveal">O plano aprende<br/>com a rotina.</h2>
+    <p class="lead reveal">O Geninho identifica as melhores janelas de estudo para cada filho, acompanha o domínio por matéria e tópico, e ajusta as sugestões ao longo do tempo.</p>
+    <div class="features">
+      <article class="feature reveal">
+        <div class="ico">⏰</div>
+        <h3>Janelas de estudo ideais</h3>
+        <p>O app aprende os horários em que seu filho estuda melhor e concentra as sugestões ali.</p>
       </article>
-      <article class="card">
-        <div class="icon">📘</div>
-        <h3>Ano escolar com currículo</h3>
-        <p>Organize matérias e assuntos do jeito da escola do seu filho.</p>
+      <article class="feature reveal">
+        <div class="ico">📈</div>
+        <h3>Domínio por tópico</h3>
+        <p>Cada matéria e cada tópico têm um nível de mastery que evolui a cada quiz e sessão concluída.</p>
       </article>
-      <article class="card">
-        <div class="icon">📷</div>
-        <h3>OCR com revisão guiada</h3>
-        <p>Tire foto da agenda ou envie PDF e o app ajuda a estruturar tudo.</p>
-      </article>
-      <article class="card">
-        <div class="icon">🧠</div>
-        <h3>Plano com IA</h3>
-        <p>A IA sugere um plano realista considerando provas, histórico e tempo disponível.</p>
-      </article>
-      <article class="card">
-        <div class="icon">🎁</div>
-        <h3>Recompensas da família</h3>
-        <p>Você define as regras e mantém o controle das recompensas.</p>
-      </article>
-      <article class="card">
-        <div class="icon">📊</div>
-        <h3>Resumo de progresso</h3>
-        <p>Veja rapidamente evolução por matéria, tópicos estudados e onde precisa de reforço.</p>
+      <article class="feature reveal">
+        <div class="ico">🎯</div>
+        <h3>Boost de prova próxima</h3>
+        <p>À medida que a data da prova se aproxima, os assuntos dela ganham prioridade automática.</p>
       </article>
     </div>
-  </section>
+  </div>
+</section>
 
-  <section id="estudantes" class="section container">
-    <h2>Para estudantes</h2>
-    <p class="lead">
-      Estudar fica mais claro: o aluno registra o que estudou, faz quiz e vê o próprio progresso.
-    </p>
-    <div class="grid">
-      <article class="card">
-        <div class="icon">✅</div>
-        <h3>Conclusão com validação</h3>
-        <p>Antes de concluir, ele marca os assuntos e responde um quiz objetivo.</p>
-      </article>
-      <article class="card">
-        <div class="icon">🔎</div>
-        <h3>Busca de assuntos</h3>
-        <p>Encontrar conteúdos é rápido, mesmo com variação de escrita.</p>
-      </article>
-      <article class="card">
-        <div class="icon">🔁</div>
-        <h3>Substituir pergunta</h3>
-        <p>Se algo estiver confuso, ele troca a pergunta e segue sem travar.</p>
-      </article>
-      <article class="card">
-        <div class="icon">🛤️</div>
-        <h3>Quiz do Milhão</h3>
-        <p>Cada matéria vira uma trilha com fases curtas e progresso visível.</p>
-      </article>
-      <article class="card">
-        <div class="icon">⭐</div>
-        <h3>Moedas por mérito</h3>
-        <p>As moedas chegam com constância e acertos de verdade.</p>
-      </article>
-      <article class="card">
-        <div class="icon">🔥</div>
-        <h3>Ritmo de estudo</h3>
-        <p>Streaks e conquistas ajudam a manter o hábito sem pressão excessiva.</p>
-      </article>
-      <article class="card">
-        <div class="icon">▶</div>
-        <h3>YouTube sob controle</h3>
-        <p>Vídeos de apoio aparecem só quando você permitir.</p>
-      </article>
+<section id="funcionalidades" class="section section-soft">
+  <div class="container">
+    <p class="eyebrow reveal">Funcionalidades</p>
+    <h2 class="reveal">Tudo que sua família<br/>encontra no Geninho.</h2>
+    <p class="lead reveal">Recursos pensados para facilitar a rotina e melhorar o aprendizado no dia a dia.</p>
+    <div class="features">
+      <article class="feature reveal"><div class="ico">👥</div><h3>Perfis por papel</h3><p>Experiências dedicadas para responsáveis e estudantes.</p></article>
+      <article class="feature reveal"><div class="ico">🧒</div><h3>Preferências individuais</h3><p>Cada criança tem seu ritmo, horário, duração e meta.</p></article>
+      <article class="feature reveal"><div class="ico">🏫</div><h3>Ano escolar estruturado</h3><p>Matérias e assuntos organizados para o ano inteiro.</p></article>
+      <article class="feature reveal"><div class="ico">🧾</div><h3>OCR multi-origem</h3><p>Importe por câmera, galeria ou PDF sem complicação.</p></article>
+      <article class="feature reveal"><div class="ico">📚</div><h3>OCR em lote</h3><p>Várias páginas de uma vez, com organização automática.</p></article>
+      <article class="feature reveal"><div class="ico">🗓️</div><h3>Aulas, atividades e provas</h3><p>Rotina do dia clara, com distinção entre atividade e estudo.</p></article>
+      <article class="feature reveal"><div class="ico">🔔</div><h3>Lembretes inteligentes</h3><p>Alertas para prova e lembretes diários de lançamento de nota.</p></article>
+      <article class="feature reveal"><div class="ico">🎙️</div><h3>Atalhos com Siri</h3><p>Por voz, aulas de hoje e assuntos da prova por matéria.</p></article>
+      <article class="feature reveal"><div class="ico">🤖</div><h3>Plano com IA</h3><p>Sugestões que respeitam a realidade da família.</p></article>
+      <article class="feature reveal"><div class="ico">🧠</div><h3>Quiz revisado</h3><p>As perguntas passam por revisão antes de aparecer.</p></article>
+      <article class="feature reveal"><div class="ico">♻️</div><h3>Banco de perguntas</h3><p>Perguntas boas voltam para manter o quiz estável.</p></article>
+      <article class="feature reveal"><div class="ico">🔀</div><h3>Alternativas embaralhadas</h3><p>Respostas mudam de ordem para evitar decorar posição.</p></article>
+      <article class="feature reveal"><div class="ico">🏅</div><h3>Gamificação</h3><p>Conquistas e moedas reforçam o esforço, com supervisão.</p></article>
+      <article class="feature reveal"><div class="ico">📱</div><h3>Multi-dispositivo</h3><p>iPhone, iPad e Apple Watch, com handoff para concluir.</p></article>
+      <article class="feature reveal"><div class="ico">🔐</div><h3>Login seguro</h3><p>Sign in with Apple, Google e Face ID / Touch ID para acesso rápido e protegido.</p></article>
+      <article class="feature reveal"><div class="ico">⚡</div><h3>Live Activity</h3><p>Acompanhe a sessão de estudo em tempo real na tela de bloqueio e Dynamic Island.</p></article>
+      <article class="feature reveal"><div class="ico">🛡️</div><h3>Moderação automática</h3><p>Perguntas sensíveis são classificadas e ficam disponíveis para o responsável revisar.</p></article>
+      <article class="feature reveal"><div class="ico">🔔</div><h3>Lembretes inteligentes</h3><p>Alertas de prova e lançamento de nota, com boost conforme a data se aproxima.</p></article>
+      <article class="feature reveal"><div class="ico">💳</div><h3>Free e Premium</h3><p>Comece grátis e expanda quando precisar.</p></article>
     </div>
-  </section>
+  </div>
+</section>
 
-  <section id="funcionalidades" class="section container">
-    <h2>Tudo o que sua família encontra no Geninho</h2>
-    <p class="lead">Recursos pensados para facilitar a rotina e melhorar o aprendizado no dia a dia.</p>
-    <div class="grid">
-      <article class="card">
-        <div class="icon">👥</div>
-        <h3>Perfis e navegação por papel</h3>
-        <p>Experiências diferentes para responsáveis e estudantes, cada um com seu foco.</p>
-      </article>
-      <article class="card">
-        <div class="icon">🧒</div>
-        <h3>Preferências individuais por filho</h3>
-        <p>Cada criança tem seu ritmo: horário, duração e meta próprios.</p>
-      </article>
-      <article class="card">
-        <div class="icon">🏫</div>
-        <h3>Ano escolar estruturado</h3>
-        <p>Matérias e assuntos organizados para o ano inteiro.</p>
-      </article>
-      <article class="card">
-        <div class="icon">🧾</div>
-        <h3>OCR multi-origem</h3>
-        <p>Importe por câmera, galeria ou PDF sem complicação.</p>
-      </article>
-      <article class="card">
-        <div class="icon">📚</div>
-        <h3>OCR de assuntos em lote</h3>
-        <p>Várias páginas de uma vez, com organização automática dos tópicos.</p>
-      </article>
-      <article class="card">
-        <div class="icon">🗓️</div>
-        <h3>Gestão de aulas, atividades e provas</h3>
-        <p>Veja a rotina do dia e diferencie facilmente atividade e estudo para prova.</p>
-      </article>
-      <article class="card">
-        <div class="icon">🔔</div>
-        <h3>Lembretes inteligentes de prova e nota</h3>
-        <p>Receba alertas para prova e lembretes diários quando faltar lançar nota.</p>
-      </article>
-      <article class="card">
-        <div class="icon">🎙️</div>
-        <h3>Atalhos com Siri</h3>
-        <p>Pergunte por voz as aulas de hoje e os assuntos da prova por matéria.</p>
-      </article>
-
-      <article class="card">
-        <div class="icon">🤖</div>
-        <h3>Plano de estudo com IA</h3>
-        <p>Sugestões personalizadas que respeitam a realidade da família.</p>
-      </article>
-      <article class="card">
-        <div class="icon">✅</div>
-        <h3>Conclusão validada por quiz</h3>
-        <p>Só conclui quando houver evidência de estudo, não apenas um clique.</p>
-      </article>
-      <article class="card">
-        <div class="icon">🧠</div>
-        <h3>Quiz mais confiável</h3>
-        <p>As perguntas passam por revisão para ficar mais claras.</p>
-      </article>
-      <article class="card">
-        <div class="icon">♻️</div>
-        <h3>Banco inteligente de perguntas</h3>
-        <p>Perguntas boas voltam para manter o quiz mais estável.</p>
-      </article>
-      <article class="card">
-        <div class="icon">🧩</div>
-        <h3>Substituir pergunta com feedback</h3>
-        <p>O feedback do aluno ajuda a melhorar continuamente a experiência.</p>
-      </article>
-      <article class="card">
-        <div class="icon">🔀</div>
-        <h3>Alternativas embaralhadas</h3>
-        <p>As respostas mudam de ordem para evitar decorar posição.</p>
-      </article>
-      <article class="card">
-        <div class="icon">🛤️</div>
-        <h3>Quiz do Milhão por matéria</h3>
-        <p>Fases curtas por matéria para avançar passo a passo.</p>
-      </article>
-      <article class="card">
-        <div class="icon">🏅</div>
-        <h3>Gamificação e recompensas</h3>
-        <p>Conquistas e moedas reforçam o esforço, com supervisão dos pais.</p>
-      </article>
-      <article class="card">
-        <div class="icon">🎥</div>
-        <h3>YouTube com controle parental</h3>
-        <p>Conteúdo de apoio aparece somente com permissão ativa.</p>
-      </article>
-      <article class="card">
-        <div class="icon">📱</div>
-        <h3>Experiência multi-dispositivo</h3>
-        <p>Funciona bem em iPhone, iPad e Apple Watch, com handoff para concluir no iPhone.</p>
-      </article>
-      <article class="card">
-        <div class="icon">💳</div>
-        <h3>Plano Free e Premium</h3>
-        <p>Comece grátis e expanda quando precisar.</p>
-      </article>
+<section id="como-funciona" class="section section-dark">
+  <div class="container">
+    <p class="eyebrow reveal">Como funciona</p>
+    <h2 class="reveal">Da configuração ao progresso em poucos passos.</h2>
+    <p class="lead reveal">Começar leva minutos. O resto a família sente no dia a dia.</p>
+    <div class="steps">
+      <div class="step reveal"><div class="num">1</div><p>Cadastre seu filho e configure o ritmo de estudo.</p></div>
+      <div class="step reveal"><div class="num">2</div><p>Importe grade e conteúdos por foto ou PDF.</p></div>
+      <div class="step reveal"><div class="num">3</div><p>A IA monta um plano com base na rotina e nas provas.</p></div>
+      <div class="step reveal"><div class="num">4</div><p>O aluno estuda, registra e faz quiz de validação.</p></div>
+      <div class="step reveal"><div class="num">5</div><p>Você acompanha progresso e dificuldades pelo app.</p></div>
     </div>
-  </section>
+  </div>
+</section>
 
-  <section id="como-funciona" class="section container">
-    <h2>Como funciona</h2>
-    <p class="lead">Da configuração ao progresso em poucos passos.</p>
-    <div class="flow">
-      <div class="step"><strong>1</strong><p>Você cadastra seu filho e configura o ritmo de estudo.</p></div>
-      <div class="step"><strong>2</strong><p>Importa grade e conteúdos por foto ou PDF.</p></div>
-      <div class="step"><strong>3</strong><p>A IA monta um plano com base na rotina e nas provas.</p></div>
-      <div class="step"><strong>4</strong><p>O aluno estuda, registra assuntos e faz quiz de validação.</p></div>
-      <div class="step"><strong>5</strong><p>Você acompanha progresso, dificuldades e evolução no app.</p></div>
-    </div>
-  </section>
-
-  <section id="planos" class="section container">
-    <h2>Planos</h2>
-    <p class="lead">Comece no Free e avance para o Premium quando sua rotina pedir mais.</p>
+<section id="planos" class="section section-light">
+  <div class="container">
+    <p class="eyebrow reveal">Planos</p>
+    <h2 class="reveal">Comece no Free.<br/>Evolua para o Premium.</h2>
+    <p class="lead reveal">Sem compromisso, sem complicação. Avance quando sua rotina pedir.</p>
     <div class="plans">
-      <article class="plan">
+      <article class="plan reveal">
         <h3>Free</h3>
+        <span class="tag">Para começar</span>
         <ul>
           <li>Recursos essenciais para começar</li>
           <li>Perfeito para testar com sua família</li>
           <li>Com anúncios e limites de uso</li>
         </ul>
       </article>
-      <article class="plan">
+      <article class="plan featured reveal">
         <h3>Premium</h3>
+        <span class="tag">Família em rotina</span>
         <ul>
-          <li>Mais espaço para crescer sem travas</li>
+          <li>Tudo do Free, sem limites de uso</li>
           <li>Sem anúncios</li>
+          <li>Chat livre com o Geninho por IA</li>
+          <li>Sincronização com Apple Watch</li>
           <li>Ideal para famílias com rotina intensa</li>
         </ul>
       </article>
     </div>
-  </section>
+  </div>
+</section>
 
-  <section class="section container">
-    <h2>Perguntas frequentes</h2>
+<section class="section section-light" style="padding-top: 0;">
+  <div class="container">
+    <p class="eyebrow reveal">Perguntas frequentes</p>
+    <h2 class="reveal mb-0" style="margin-bottom: 48px;">Tire suas dúvidas.</h2>
     <div class="faq">
-      <div class="faq-item">
-        <strong>O app ainda pede aprovação dos pais para concluir estudo?</strong>
+      <div class="faq-item reveal">
+        <strong>O app pede aprovação dos pais para concluir estudo?</strong>
         <p>No estudo diário e para provas, a conclusão acontece pelo desempenho no quiz. A aprovação dos pais continua no fluxo de recompensas.</p>
       </div>
-      <div class="faq-item">
-        <strong>Posso importar várias páginas de índice de livro de uma vez?</strong>
-        <p>Sim. Você pode importar várias páginas e o app organiza os tópicos automaticamente.</p>
+      <div class="faq-item reveal">
+        <strong>Posso importar várias páginas de livro de uma vez?</strong>
+        <p>Sim. Você envia várias páginas e o app organiza os tópicos automaticamente.</p>
       </div>
-      <div class="faq-item">
-        <strong>YouTube aparece para todos os alunos?</strong>
+      <div class="faq-item reveal">
+        <strong>O YouTube aparece para todos os alunos?</strong>
         <p>Não. Só aparece quando você ativa a permissão para aquele filho.</p>
       </div>
-      <div class="faq-item">
+      <div class="faq-item reveal">
         <strong>O quiz usa IA local do celular?</strong>
         <p>Não. O quiz usa IA online e as perguntas passam por revisão antes de aparecer.</p>
       </div>
-      <div class="faq-item">
-        <strong>Por que o modelo de IA do quiz foi trocado?</strong>
-        <p>Atualizamos o motor de IA para reduzir perguntas confusas e deixar o quiz mais confiável.</p>
-      </div>
-      <div class="faq-item">
+      <div class="faq-item reveal">
         <strong>Consigo consultar sem abrir o app?</strong>
-        <p>Sim. Você pode usar atalhos da Siri para ver aulas de hoje e assuntos da prova por matéria.</p>
+        <p>Sim. Use atalhos da Siri para ver aulas de hoje e assuntos da prova por matéria.</p>
       </div>
-      <div class="faq-item">
-        <strong>Dá para concluir estudo direto no Apple Watch?</strong>
+      <div class="faq-item reveal">
+        <strong>Dá para concluir estudo no Apple Watch?</strong>
         <p>O Watch mostra sessões do dia e envia o pedido; a conclusão acontece com segurança no iPhone.</p>
       </div>
-
-    </div>
-  </section>
-
-  <section class="container cta">
-    <div>
-      <h2>Geninho</h2>
-      <p>Mais organização para você. Mais autonomia para seu filho. Tudo no mesmo app.</p>
-    </div>
-    <div class="cta-actions">
-      <a class="btn btn-light" href="#">App Store</a>
-      <a class="btn btn-light" href="/termos/">Termos</a>
-      <a class="btn btn-light" href="/privacidade/">Privacidade</a>
-    </div>
-  </section>
-
-  <footer>
-    <div class="container footer-row">
-      <span>© 2026 Geninho</span>
-      <div class="footer-links">
-        <a href="/termos/">Termos de Uso</a>
-        <a href="/privacidade/">Política de Privacidade</a>
-        <a href="mailto:suporte@geninho.app.br">suporte@geninho.app.br</a>
+      <div class="faq-item reveal">
+        <strong>O chat livre do Geninho responde qualquer coisa?</strong>
+        <p>Não. O chat foca em assuntos escolares e nunca entrega gabarito direto. Perguntas fora de escopo ou sensíveis ficam sinalizadas para o responsável revisar.</p>
+      </div>
+      <div class="faq-item reveal">
+        <strong>Meus dados estão seguros?</strong>
+        <p>Usamos Sign in with Apple, Google e Face ID / Touch ID. O OCR roda no próprio iPhone — as imagens não saem do dispositivo. Detalhes completos na <a href="/privacidade/" style="color: var(--accent);">Política de Privacidade</a>.</p>
       </div>
     </div>
-  </footer>
+  </div>
+</section>
+
+<section class="final-cta">
+  <div class="container">
+    <h2 class="reveal">Mais leve para você.<br/>Mais claro para seu filho.</h2>
+    <p class="reveal">Tudo no mesmo app.</p>
+    <div class="reveal">
+      <a class="btn btn-primary" href="#">Baixar na App Store</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container footer-inner">
+    <span>© 2026 Geninho — Pablo Rodrigo (desenvolvedor independente), Recife/PE</span>
+    <div class="footer-links">
+      <a href="/termos/">Termos</a>
+      <a href="/privacidade/">Privacidade</a>
+      <a href="/transparencia/">Transparência</a>
+      <a href="mailto:suporte@geninho.app.br">suporte@geninho.app.br</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('in-view');
+        io.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+</script>
+
 </body>
 </html>
