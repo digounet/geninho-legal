@@ -1,20 +1,22 @@
 # legal-site — Geninho
 
-Site estático com os documentos legais exigidos pela App Store e pela LGPD.
+Site público do Geninho: **landing page + documentos legais** exigidos pela App Store e pela LGPD.
 Publicado em **https://geninho.app.br** via GitHub Pages + domínio próprio.
 
 ## Estrutura
 
 ```
 legal-site/
-├── _config.yml                   # Config Jekyll (tema minima + URL do domínio)
+├── _config.yml                   # Config Jekyll (tema minima nas páginas legais + URL do domínio)
 ├── CNAME                         # Domínio custom (geninho.app.br)
-├── index.md                      # Página inicial com links
-├── politica-de-privacidade.md
-├── termos-de-uso.md
-├── transparencia-e-seguranca.md
+├── index.html                    # Landing page (HTML self-contained, CSS inline)
+├── politica-de-privacidade.md    # → /privacidade/
+├── termos-de-uso.md              # → /termos/
+├── transparencia-e-seguranca.md  # → /transparencia/
 └── README.md                     # este arquivo
 ```
+
+A landing (`index.html`) é a **fonte de verdade** e não usa tema Jekyll — renderiza com CSS próprio. As páginas legais usam o tema `minima` (configurado em `_config.yml`).
 
 ## Como publicar (passo a passo)
 
@@ -103,9 +105,11 @@ Quando a política ou termos mudarem:
 ## Checklist antes de submeter à Apple
 
 - [ ] DNS apontando para os IPs do GitHub Pages e propagado (testar `dig geninho.app.br`)
-- [ ] `https://geninho.app.br/politica-de-privacidade.html` abre sem login
-- [ ] `https://geninho.app.br/termos-de-uso.html` abre sem login
+- [ ] `https://geninho.app.br/` abre a landing sem login
+- [ ] `https://geninho.app.br/privacidade/` abre sem login
+- [ ] `https://geninho.app.br/termos/` abre sem login
 - [ ] Enforce HTTPS ativo no GitHub Pages
 - [ ] Controlador identificado como "Pablo Rodrigo (desenvolvedor independente) — Recife/PE"
 - [ ] Contato `suporte@geninho.app.br` configurado e respondendo
+- [ ] Botão "App Store" na landing (`legal-site/index.html`, busque `href="#"`) atualizado com a URL real do app após aprovação
 - [ ] URLs coladas no App Store Connect
