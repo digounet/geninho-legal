@@ -1,13 +1,14 @@
 # legal-site — Geninho
 
 Site estático com os documentos legais exigidos pela App Store e pela LGPD.
-Esta pasta foi preparada para ser publicada em um **repositório público** (o repo principal `Geninho` é privado e não expõe GitHub Pages no plano Free).
+Publicado em **https://geninho.app.br** via GitHub Pages + domínio próprio.
 
 ## Estrutura
 
 ```
 legal-site/
-├── _config.yml                   # Config Jekyll (tema minima)
+├── _config.yml                   # Config Jekyll (tema minima + URL do domínio)
+├── CNAME                         # Domínio custom (geninho.app.br)
 ├── index.md                      # Página inicial com links
 ├── politica-de-privacidade.md
 ├── termos-de-uso.md
@@ -17,75 +18,94 @@ legal-site/
 
 ## Como publicar (passo a passo)
 
-### Opção A — GitHub Pages a partir de repo público (recomendada)
+### 1. Criar repositório público no GitHub
 
-1. **Criar repo público** na sua conta GitHub (ex.: `geninho-legal`).
+Sugestão de nome: `geninho-legal` ou `geninho-site`.
 
-2. **Copiar o conteúdo** desta pasta para o novo repo:
-   ```bash
-   # na sua máquina, fora do repo privado:
-   mkdir ~/geninho-legal && cd ~/geninho-legal
-   cp -R /Users/pablo/Source/Swift/Geninho/legal-site/. .
-   git init -b main
-   git add .
-   git commit -m "Initial: legal docs for Geninho"
-   git remote add origin https://github.com/<seu-usuario>/geninho-legal.git
-   git push -u origin main
-   ```
+```bash
+mkdir ~/geninho-legal && cd ~/geninho-legal
+cp -R /Users/pablo/Source/Swift/Geninho/legal-site/. .
+git init -b main
+git add .
+git commit -m "Initial: legal docs for Geninho"
+git remote add origin https://github.com/<seu-usuario>/geninho-legal.git
+git push -u origin main
+```
 
-3. **Ativar GitHub Pages**:
-   - No GitHub, abra o repo `geninho-legal` → **Settings** → **Pages**
-   - Em **Source**, selecione **Deploy from a branch**
-   - Branch: `main`, pasta: `/ (root)`
-   - Save
+### 2. Ativar GitHub Pages
 
-4. **Aguardar 1–2 minutos**. A URL publicada fica em:
-   ```
-   https://<seu-usuario>.github.io/geninho-legal/
-   ```
+No GitHub: repo `geninho-legal` → **Settings → Pages**
 
-5. **Testar no navegador** (deve abrir sem login):
-   - `https://<seu-usuario>.github.io/geninho-legal/`
-   - `https://<seu-usuario>.github.io/geninho-legal/politica-de-privacidade.html`
-   - `https://<seu-usuario>.github.io/geninho-legal/termos-de-uso.html`
+- **Source:** Deploy from a branch
+- **Branch:** `main`
+- **Folder:** `/ (root)`
+- **Save**
 
-6. **Colar as URLs no App Store Connect**:
-   - **App Information → Privacy Policy URL** → URL da política
-   - **App Information → License Agreement** (ou nota nos metadados da versão) → URL dos termos
-   - **Subscription Review Information → Terms of Service** → URL dos termos
+Aguarde 1–2 min. Em **Custom domain**, o GitHub deve ler o arquivo `CNAME` e já exibir `geninho.app.br`. Se não aparecer, digite manualmente e salve.
 
-### Opção B — Domínio próprio (se você tiver geninho.com.br)
+Depois marque **Enforce HTTPS** (pode levar até 24h para o certificado Let's Encrypt ser emitido).
 
-1. Na pasta do site, criar arquivo `CNAME` com o domínio (ex.: `legal.geninho.com.br`).
-2. No painel DNS do domínio, apontar um registro CNAME `legal` → `<seu-usuario>.github.io`.
-3. No GitHub Pages do repo `geninho-legal`, em **Settings → Pages → Custom domain**, adicionar o domínio.
-4. Aguardar verificação + HTTPS (pode levar alguns minutos).
+### 3. Configurar DNS no seu registrador (Registro.br ou onde estiver)
 
-### Opção C — Cloudflare Pages (deploy direto deste repo privado)
+Para o domínio **apex** (`geninho.app.br`), crie registros **A** apontando para os 4 IPs do GitHub Pages:
 
-Útil se quiser manter tudo em **um único repo privado**.
+| Tipo | Nome | Valor | TTL |
+|---|---|---|---|
+| A | `@` (ou vazio) | `185.199.108.153` | 3600 |
+| A | `@` | `185.199.109.153` | 3600 |
+| A | `@` | `185.199.110.153` | 3600 |
+| A | `@` | `185.199.111.153` | 3600 |
 
-1. Criar conta gratuita em [Cloudflare Pages](https://pages.cloudflare.com/).
-2. Conectar ao GitHub e autorizar o repo privado `Geninho`.
-3. Em **Build settings**, definir:
-   - **Build command:** (deixar vazio)
-   - **Build output directory:** `legal-site`
-   - **Root directory:** (deixar vazio)
-4. Deploy → URL `<projeto>.pages.dev` fica pública.
+Opcionalmente, registros **AAAA** (IPv6):
 
-⚠️ Cloudflare Pages **não** converte Markdown automaticamente. Para essa opção, seria preciso gerar HTML (ex.: executando Jekyll localmente e publicando o HTML gerado). Para simplicidade, **prefira a Opção A**.
+| Tipo | Nome | Valor |
+|---|---|---|
+| AAAA | `@` | `2606:50c0:8000::153` |
+| AAAA | `@` | `2606:50c0:8001::153` |
+| AAAA | `@` | `2606:50c0:8002::153` |
+| AAAA | `@` | `2606:50c0:8003::153` |
+
+Para redirecionar `www.geninho.app.br` → `geninho.app.br`:
+
+| Tipo | Nome | Valor |
+|---|---|---|
+| CNAME | `www` | `<seu-usuario>.github.io` |
+
+⚠️ **Remova qualquer registro A/AAAA/CNAME antigo** apontando para outro lugar no apex antes de criar os novos. O Registro.br costuma levar 5–60 min para propagar.
+
+### 4. Validar
+
+Depois que o DNS propagar, abra no navegador (navegação anônima recomendada):
+
+- `https://geninho.app.br/` → página inicial
+- `https://geninho.app.br/politica-de-privacidade.html`
+- `https://geninho.app.br/termos-de-uso.html`
+- `https://geninho.app.br/transparencia-e-seguranca.html`
+
+Se HTTPS ainda não estiver ativo, o GitHub ativa o certificado automaticamente até 24h após o DNS propagar. Até lá, `http://` funciona.
+
+### 5. Colar no App Store Connect
+
+- **App Information → Privacy Policy URL:** `https://geninho.app.br/politica-de-privacidade.html`
+- **App Information → Marketing URL (opcional):** `https://geninho.app.br`
+- **App Information → Support URL:** `https://geninho.app.br` (ou, melhor, criar uma página `/suporte` depois)
+- **Subscription Review Information → Terms of Service:** `https://geninho.app.br/termos-de-uso.html`
 
 ## Atualização futura
 
 Quando a política ou termos mudarem:
-1. Atualizar os `.md` em `documentation/legal/` (no repo privado, fonte da verdade).
-2. Copiar os arquivos atualizados para `legal-site/` (manter o front-matter Jekyll no topo).
-3. No repo público, commitar e push — o Pages atualiza em 1–2 minutos.
+
+1. Atualizar os `.md` em `documentation/legal/` (repo privado, fonte da verdade).
+2. Copiar para `legal-site/` e manter o front-matter Jekyll no topo.
+3. `cp -R legal-site/. ~/geninho-legal/` e `git commit && git push` no repo público.
+4. O Pages republica em 1–2 min.
 
 ## Checklist antes de submeter à Apple
 
-- [ ] URL da política de privacidade abre no navegador **sem login**
+- [ ] DNS apontando para os IPs do GitHub Pages e propagado (testar `dig geninho.app.br`)
+- [ ] `https://geninho.app.br/politica-de-privacidade.html` abre sem login
+- [ ] `https://geninho.app.br/termos-de-uso.html` abre sem login
+- [ ] Enforce HTTPS ativo no GitHub Pages
 - [ ] Controlador identificado como "Pablo Rodrigo (desenvolvedor independente) — Recife/PE"
-- [ ] Termos estão acessíveis na mesma URL raiz
-- [ ] Contato `suporte@geninho.app.br` está configurado e respondendo
+- [ ] Contato `suporte@geninho.app.br` configurado e respondendo
 - [ ] URLs coladas no App Store Connect

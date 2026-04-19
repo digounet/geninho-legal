@@ -1,5 +1,7 @@
 title: Geninho — Documentos Legais
 description: Política de Privacidade, Termos de Uso e Transparência do app Geninho
+url: https://geninho.app.br
+baseurl: ""
 theme: minima
 lang: pt-BR
 
@@ -10,3 +12,4 @@ header_pages:
 
 plugins:
   - jekyll-seo-tag
+  - jekyll-sitemap
