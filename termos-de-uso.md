@@ -2,7 +2,10 @@
 layout: page
 title: Termos de Uso
 permalink: /termos/
+lang: pt-BR
 ---
+
+> 🌐 **Idioma:** **PT** · [EN](/en/terms/) · [ES](/es/terminos/)
 
 # Termos de Uso — Geninho
 

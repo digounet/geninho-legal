@@ -2,7 +2,10 @@
 layout: page
 title: Transparência e Segurança
 permalink: /transparencia/
+lang: pt-BR
 ---
+
+> 🌐 **Idioma:** **PT** · [EN](/en/transparency/) · [ES](/es/transparencia/)
 
 # Transparência e Segurança — Geninho
 

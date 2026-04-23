@@ -2,11 +2,14 @@
 layout: page
 title: Política de Privacidade
 permalink: /privacidade/
+lang: pt-BR
 ---
+
+> 🌐 **Idioma:** **PT** · [EN](/en/privacy/) · [ES](/es/privacidad/)
 
 # Política de Privacidade — Geninho
 
-**Última atualização:** 19 de abril de 2026
+**Última atualização:** 21 de abril de 2026
 
 ## 1. Quem somos e finalidade desta Política
 O **Geninho** é um aplicativo iOS de apoio educacional para famílias brasileiras, focado em organização escolar, plano de estudos com IA e validação de conclusão por quiz.
@@ -99,6 +102,14 @@ Após o OCR, **apenas o texto extraído** (não a imagem) pode ser enviado a pro
 
 ### 5.3 Chat com o Geninho
 Perguntas feitas ao chat livre (Premium) e as respostas geradas trafegam pelo provedor de IA contratado. Não usamos essas conversas para treinar modelos de IA; os provedores listados na seção 6 têm cláusulas contratuais de não-treinamento para dados de API.
+
+### 5.4 Consentimento obrigatório antes do envio a provedores de IA
+Antes do primeiro uso de qualquer recurso que dependa de IA na nuvem (geração de plano, OCR estruturado, quiz, chat), o app apresenta a tela **"Uso de Inteligência Artificial"** listando:
+- **Quais dados serão enviados** — textos extraídos de fotos/PDFs, matérias e tópicos cadastrados, perguntas do chat e contexto pedagógico.
+- **Para quem** — OpenAI, Inc. (EUA), Google LLC (EUA) e, quando configurado, Microsoft Corporation (Azure OpenAI).
+- **O que garantimos** — os provedores são contratualmente proibidos de treinar modelos com seus dados; não enviamos dados financeiros, senhas, localização ou identificadores pessoais além do necessário.
+
+O usuário precisa tocar **"Aceitar e continuar"** para liberar os recursos de IA. Se escolher **"Continuar sem IA"**, o app segue funcionando com recursos locais (horário, provas, lembretes, conquistas) e os chamados à nuvem ficam bloqueados. A preferência pode ser revista a qualquer momento em **Mais → Preferências de IA**. Enquanto não houver aceite, **nenhum dado pessoal é enviado aos provedores de IA**.
 
 ## 6. Operadores e fornecedores (com quem compartilhamos dados)
 

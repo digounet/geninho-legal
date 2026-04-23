@@ -1,15 +1,29 @@
 title: Geninho — Documentos Legais
-description: Política de Privacidade, Termos de Uso e Transparência do app Geninho
+description: Política de Privacidade, Termos de Uso e Transparência do app Geninho (PT / EN / ES)
 url: https://geninho.app.br
 baseurl: ""
 theme: minima
 lang: pt-BR
 
-header_pages:
-  - politica-de-privacidade.md
-  - termos-de-uso.md
-  - transparencia-e-seguranca.md
+# Multi-language support (plugin-free on GitHub Pages).
+# Each legal document exists in three locales under /, /en/, /es/.
+# The landing page (index.html) is served directly per locale from /, /en/, /es/.
+languages: [pt-BR, en, es]
+default_lang: pt-BR
+
+# header_pages is intentionally omitted so minima does not show a single-locale nav
+# on pages of another locale. Per-locale navigation lives in each document's body.
 
 plugins:
   - jekyll-seo-tag
   - jekyll-sitemap
+
+defaults:
+  - scope:
+      path: "en"
+    values:
+      lang: en
+  - scope:
+      path: "es"
+    values:
+      lang: es
