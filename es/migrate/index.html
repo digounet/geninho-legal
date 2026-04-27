@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta name="robots" content="noindex,nofollow"/>
+<title>Confirmar migración de cuenta — Geninho</title>
+<style>
+  :root {
+    --bg: #fbfbfd;
+    --bg-soft: #f5f5f7;
+    --text: #1d1d1f;
+    --text-muted: #6e6e73;
+    --accent: #2563EB;
+    --accent-hover: #1D4ED8;
+    --danger: #dc2626;
+    --success: #059669;
+    --line: rgba(0,0,0,0.08);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { -webkit-font-smoothing: antialiased; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: var(--text);
+    background: var(--bg);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    line-height: 1.5;
+  }
+  .card {
+    width: 100%;
+    max-width: 480px;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 32px 28px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.06);
+  }
+  .lang-switch { font-size: 12px; color: var(--text-muted); margin-bottom: 18px; text-align: right; }
+  .lang-switch a { color: var(--accent); text-decoration: none; margin-left: 10px; font-weight: 500; }
+  .logo {
+    display: flex; align-items: center; gap: 8px;
+    font-weight: 600; font-size: 18px; letter-spacing: -0.02em;
+    margin-bottom: 24px;
+  }
+  .logo-mark {
+    width: 32px; height: 32px; border-radius: 9px;
+    background: linear-gradient(135deg, var(--accent), #38a8f0);
+    display: grid; place-items: center; color: #fff; font-size: 16px; font-weight: 700;
+  }
+  h1 { font-size: 22px; font-weight: 600; margin-bottom: 12px; letter-spacing: -0.02em; }
+  p { color: var(--text-muted); font-size: 15px; margin-bottom: 18px; }
+  p strong { color: var(--text); }
+  .field { margin-bottom: 14px; }
+  label { display: block; font-size: 13px; font-weight: 500; color: var(--text); margin-bottom: 6px; }
+  input {
+    width: 100%; padding: 11px 14px;
+    font: inherit; font-size: 15px;
+    border: 1px solid var(--line); border-radius: 10px;
+    background: var(--bg-soft);
+    transition: border-color 0.15s;
+  }
+  input:focus { outline: none; border-color: var(--accent); background: #fff; }
+  button {
+    width: 100%; padding: 13px;
+    font: inherit; font-size: 15px; font-weight: 600;
+    color: #fff; background: var(--accent);
+    border: none; border-radius: 10px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  button:hover:not(:disabled) { background: var(--accent-hover); }
+  button:disabled { background: #94a3b8; cursor: not-allowed; }
+  button.secondary { background: transparent; color: var(--text-muted); border: 1px solid var(--line); margin-top: 8px; }
+  button.secondary:hover:not(:disabled) { background: var(--bg-soft); color: var(--text); }
+  .status {
+    padding: 12px 14px; border-radius: 10px;
+    font-size: 13px; margin-top: 12px;
+  }
+  .status.error { background: #fef2f2; color: var(--danger); border: 1px solid #fecaca; }
+  .status.success { background: #ecfdf5; color: var(--success); border: 1px solid #a7f3d0; }
+  .info-list { list-style: none; padding: 14px 16px; background: var(--bg-soft); border-radius: 10px; margin-bottom: 18px; }
+  .info-list li { font-size: 13px; color: var(--text-muted); padding: 4px 0; }
+  .info-list li::before { content: "• "; color: var(--accent); margin-right: 4px; }
+  .spinner {
+    display: inline-block; width: 18px; height: 18px;
+    border: 2px solid #e2e8f0; border-top-color: var(--accent);
+    border-radius: 50%; animation: spin 0.7s linear infinite;
+    vertical-align: middle; margin-right: 8px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .hidden { display: none; }
+</style>
+</head>
+<body>
+<div class="card">
+  <div class="lang-switch">
+    <span data-i18n="lang_label">Idioma:</span>
+    <a href="?id=__ID__&lang=pt-BR" data-lang-link="pt-BR">PT</a>
+    <a href="?id=__ID__&lang=en" data-lang-link="en">EN</a>
+    <a href="?id=__ID__&lang=es" data-lang-link="es">ES</a>
+  </div>
+  <div class="logo">
+    <div class="logo-mark">G</div>
+    <span>Geninho</span>
+  </div>
+
+  <!-- Estado: carregando -->
+  <div id="state-loading">
+    <p><span class="spinner"></span><span data-i18n="loading">Carregando solicitação…</span></p>
+  </div>
+
+  <!-- Estado: erro (request inválido/expirado/cancelado/missing-id) -->
+  <div id="state-error" class="hidden">
+    <h1 data-i18n="error_title">Não foi possível abrir esta solicitação</h1>
+    <p id="error-message" data-i18n="error_generic">O link parece inválido ou expirado. Peça ao novo responsável que crie uma nova solicitação no app.</p>
+  </div>
+
+  <!-- Estado: já confirmada -->
+  <div id="state-already-confirmed" class="hidden">
+    <h1 data-i18n="already_title">Migração já confirmada ✓</h1>
+    <p data-i18n="already_body">Você já autorizou esta migração. Pode fechar esta página.</p>
+  </div>
+
+  <!-- Estado: pedir login -->
+  <div id="state-login" class="hidden">
+    <h1 data-i18n="login_title">Confirmar migração de conta</h1>
+    <p>
+      <span data-i18n="login_intro_prefix">Alguém solicitou migrar sua conta Geninho para a família</span>
+      <strong id="family-name"></strong>.
+    </p>
+    <p data-i18n="login_explainer">Para autorizar, faça login com a senha atual da sua conta. Sem isso, ninguém consegue mover seu cadastro.</p>
+    <div class="field">
+      <label for="email" data-i18n="email_label">E-mail da sua conta Geninho</label>
+      <input type="email" id="email" autocomplete="username" />
+    </div>
+    <div class="field">
+      <label for="password" data-i18n="password_label">Senha</label>
+      <input type="password" id="password" autocomplete="current-password" />
+    </div>
+    <button id="login-btn" data-i18n="login_button">Entrar</button>
+    <div id="login-error" class="status error hidden"></div>
+  </div>
+
+  <!-- Estado: confirmar -->
+  <div id="state-confirm" class="hidden">
+    <h1 data-i18n="confirm_title">Tudo certo! Confirmar migração?</h1>
+    <p>
+      <span data-i18n="confirm_body_prefix">Sua conta vai sair da família atual e passar para</span>
+      <strong id="confirm-family-name"></strong>.
+    </p>
+    <ul class="info-list">
+      <li data-i18n="confirm_bullet_1">Cadastros antigos (aulas, provas, sessões, conquistas) serão apagados.</li>
+      <li data-i18n="confirm_bullet_2">Suas moedas e sequência de estudos são preservadas.</li>
+      <li data-i18n="confirm_bullet_3">Você pode cancelar pelo botão abaixo.</li>
+    </ul>
+    <button id="confirm-btn" data-i18n="confirm_button">Confirmar migração</button>
+    <button class="secondary" id="cancel-btn" data-i18n="confirm_cancel">Cancelar</button>
+    <div id="confirm-error" class="status error hidden"></div>
+  </div>
+
+  <!-- Estado: sucesso -->
+  <div id="state-success" class="hidden">
+    <h1 data-i18n="success_title">Migração confirmada 🎉</h1>
+    <p data-i18n="success_body">Sua conta foi movida para a nova família. O novo responsável já recebeu a confirmação no app. Pode fechar esta página.</p>
+  </div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-app.js";
+import {
+  getAuth, signInWithEmailAndPassword, signOut
+} from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
+import {
+  getFirestore, doc, getDoc, updateDoc
+} from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
+
+// Mesma config Firebase do app iOS (geninho-5d623). Web SDK: API key é
+// pública por design — segurança é feita pelas rules do Firestore.
+const firebaseConfig = {
+  apiKey: "AIzaSyC7ygKKhbte9CD3cECQ_dh9mKCOXOhc3AA",
+  authDomain: "geninho-5d623.firebaseapp.com",
+  projectId: "geninho-5d623",
+  storageBucket: "geninho-5d623.firebasestorage.app",
+  messagingSenderId: "818016038783",
+  appId: "1:818016038783:web:landingmigrate"
+};
+
+// Strings por idioma. pt-BR é o default deste arquivo; a chave também é
+// servida nos arquivos /en/migrate/ e /es/migrate/. Mantém aqui pra
+// permitir alternar via ?lang= (ex.: vindo de e-mail em outra língua).
+const I18N = {
+  "pt-BR": {
+    lang_label: "Idioma:",
+    loading: "Carregando solicitação…",
+    error_title: "Não foi possível abrir esta solicitação",
+    error_generic: "O link parece inválido ou expirado. Peça ao novo responsável que crie uma nova solicitação no app.",
+    error_missing_id: "URL incompleta — está faltando o identificador da solicitação.",
+    error_not_found: "Solicitação não encontrada. Pode ter sido cancelada ou expirada.",
+    error_expired: "Esta solicitação expirou. Peça ao novo responsável que crie uma nova.",
+    error_cancelled: "Esta solicitação foi cancelada.",
+    already_title: "Migração já confirmada ✓",
+    already_body: "Você já autorizou esta migração. Pode fechar esta página.",
+    login_title: "Confirmar migração de conta",
+    login_intro_prefix: "Alguém solicitou migrar sua conta Geninho para a família",
+    login_explainer: "Para autorizar, faça login com a senha atual da sua conta. Sem isso, ninguém consegue mover seu cadastro.",
+    email_label: "E-mail da sua conta Geninho",
+    password_label: "Senha",
+    login_button: "Entrar",
+    login_email_mismatch: "Este link foi enviado para outro e-mail. Faça login com o mesmo e-mail que recebeu o convite.",
+    login_user_mismatch: "A conta logada não é a desta solicitação. Saia e entre com a conta correta.",
+    login_invalid: "E-mail ou senha incorretos. Tente de novo.",
+    confirm_title: "Tudo certo! Confirmar migração?",
+    confirm_body_prefix: "Sua conta vai sair da família atual e passar para",
+    confirm_bullet_1: "Cadastros antigos (aulas, provas, sessões, conquistas) serão apagados.",
+    confirm_bullet_2: "Suas moedas e sequência de estudos são preservadas.",
+    confirm_bullet_3: "Você pode cancelar pelo botão abaixo.",
+    confirm_button: "Confirmar migração",
+    confirm_cancel: "Cancelar",
+    confirm_failed: "Não foi possível confirmar agora. Tente de novo em instantes.",
+    success_title: "Migração confirmada 🎉",
+    success_body: "Sua conta foi movida para a nova família. O novo responsável já recebeu a confirmação no app. Pode fechar esta página."
+  },
+  "en": {
+    lang_label: "Language:",
+    loading: "Loading request…",
+    error_title: "Couldn't open this request",
+    error_generic: "The link looks invalid or expired. Ask the new responsible adult to create a new request in the app.",
+    error_missing_id: "Incomplete URL — the request identifier is missing.",
+    error_not_found: "Request not found. It may have been cancelled or expired.",
+    error_expired: "This request has expired. Ask the new responsible adult to create a new one.",
+    error_cancelled: "This request has been cancelled.",
+    already_title: "Migration already confirmed ✓",
+    already_body: "You've already authorized this migration. You can close this page.",
+    login_title: "Confirm account migration",
+    login_intro_prefix: "Someone requested to migrate your Geninho account to the family",
+    login_explainer: "To authorize, sign in with your current account password. Without this, no one can move your data.",
+    email_label: "Your Geninho account e-mail",
+    password_label: "Password",
+    login_button: "Sign in",
+    login_email_mismatch: "This link was sent to another e-mail. Sign in with the same e-mail that received the invite.",
+    login_user_mismatch: "The signed-in account doesn't match this request. Sign out and in with the correct account.",
+    login_invalid: "Wrong e-mail or password. Try again.",
+    confirm_title: "All good! Confirm migration?",
+    confirm_body_prefix: "Your account will leave the current family and move to",
+    confirm_bullet_1: "Previous data (classes, exams, sessions, achievements) will be erased.",
+    confirm_bullet_2: "Your coins and study streak are preserved.",
+    confirm_bullet_3: "You can cancel using the button below.",
+    confirm_button: "Confirm migration",
+    confirm_cancel: "Cancel",
+    confirm_failed: "Couldn't confirm right now. Try again in a moment.",
+    success_title: "Migration confirmed 🎉",
+    success_body: "Your account was moved to the new family. The new responsible adult already got the confirmation in the app. You can close this page."
+  },
+  "es": {
+    lang_label: "Idioma:",
+    loading: "Cargando solicitud…",
+    error_title: "No se pudo abrir esta solicitud",
+    error_generic: "El enlace parece inválido o expirado. Pídele al nuevo responsable que cree una nueva solicitud en la app.",
+    error_missing_id: "URL incompleta — falta el identificador de la solicitud.",
+    error_not_found: "Solicitud no encontrada. Puede haber sido cancelada o expirada.",
+    error_expired: "Esta solicitud expiró. Pídele al nuevo responsable que cree una nueva.",
+    error_cancelled: "Esta solicitud fue cancelada.",
+    already_title: "Migración ya confirmada ✓",
+    already_body: "Ya autorizaste esta migración. Puedes cerrar esta página.",
+    login_title: "Confirmar migración de cuenta",
+    login_intro_prefix: "Alguien solicitó migrar tu cuenta de Geninho a la familia",
+    login_explainer: "Para autorizar, inicia sesión con la contraseña actual de tu cuenta. Sin esto, nadie puede mover tu registro.",
+    email_label: "Correo de tu cuenta Geninho",
+    password_label: "Contraseña",
+    login_button: "Iniciar sesión",
+    login_email_mismatch: "Este enlace fue enviado a otro correo. Inicia sesión con el mismo correo que recibió la invitación.",
+    login_user_mismatch: "La cuenta iniciada no coincide con esta solicitud. Sal y entra con la cuenta correcta.",
+    login_invalid: "Correo o contraseña incorrectos. Inténtalo de nuevo.",
+    confirm_title: "¡Todo listo! ¿Confirmar migración?",
+    confirm_body_prefix: "Tu cuenta dejará la familia actual y pasará a",
+    confirm_bullet_1: "Los registros anteriores (clases, exámenes, sesiones, logros) se borrarán.",
+    confirm_bullet_2: "Tus monedas y racha de estudio se conservan.",
+    confirm_bullet_3: "Puedes cancelar con el botón de abajo.",
+    confirm_button: "Confirmar migración",
+    confirm_cancel: "Cancelar",
+    confirm_failed: "No se pudo confirmar ahora. Inténtalo de nuevo en un momento.",
+    success_title: "Migración confirmada 🎉",
+    success_body: "Tu cuenta fue movida a la nueva familia. El nuevo responsable ya recibió la confirmación en la app. Puedes cerrar esta página."
+  }
+};
+
+// Locale embutido neste arquivo (versão /es/migrate/).
+const DEFAULT_LANG = "es";
+
+const params = new URLSearchParams(location.search);
+const requestedLang = params.get("lang");
+const lang = (requestedLang && I18N[requestedLang]) ? requestedLang : DEFAULT_LANG;
+const t = I18N[lang];
+
+// Aplica i18n a todos os elementos com data-i18n
+document.querySelectorAll("[data-i18n]").forEach(el => {
+  const key = el.getAttribute("data-i18n");
+  if (t[key]) el.textContent = t[key];
+});
+document.documentElement.lang = lang;
+
+// Atualiza os links do seletor pra preservar o id atual
+const requestId = params.get("id");
+document.querySelectorAll("[data-lang-link]").forEach(a => {
+  const target = a.getAttribute("data-lang-link");
+  const base = target === "pt-BR" ? "/migrate/" :
+               target === "en" ? "/en/migrate/" : "/es/migrate/";
+  a.href = `${base}${requestId ? `?id=${encodeURIComponent(requestId)}` : ""}`;
+});
+
+const states = ["loading", "error", "already-confirmed", "login", "confirm", "success"];
+function show(name) {
+  states.forEach(s => {
+    document.getElementById(`state-${s}`).classList.toggle("hidden", s !== name);
+  });
+}
+function showError(messageKey) {
+  document.getElementById("error-message").textContent = t[messageKey] || t.error_generic;
+  show("error");
+}
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+if (!requestId) {
+  showError("error_missing_id");
+} else {
+  loadRequest();
+}
+
+let cachedRequest = null;
+
+async function loadRequest() {
+  show("loading");
+  try {
+    // O doc só pode ser lido por quem está autenticado como o próprio childUserId
+    // ou como o requestedByParentId. Sem login, getDoc retorna permissão negada.
+    // Tentamos primeiro sem login — pode falhar e a gente cai direto no login.
+    const ref = doc(db, "migrationRequests", requestId);
+    let snap;
+    try {
+      snap = await getDoc(ref);
+    } catch (_) {
+      // Permissão negada sem login. Pula direto pro login.
+      show("login");
+      return;
+    }
+    if (!snap || !snap.exists()) {
+      showError("error_not_found");
+      return;
+    }
+    cachedRequest = snap.data();
+    handleRequestState();
+  } catch (e) {
+    console.error(e);
+    showError("error_generic");
+  }
+}
+
+function handleRequestState() {
+  if (!cachedRequest) { show("login"); return; }
+  if (cachedRequest.confirmedByChild === true) {
+    show("already-confirmed");
+    return;
+  }
+  if (cachedRequest.status === "expired" || expired(cachedRequest)) {
+    showError("error_expired");
+    return;
+  }
+  if (cachedRequest.status === "cancelled") {
+    showError("error_cancelled");
+    return;
+  }
+  if (cachedRequest.status === "confirmed") {
+    show("already-confirmed");
+    return;
+  }
+  // Pendente, ainda não confirmada → pede login
+  document.getElementById("family-name").textContent = `"${cachedRequest.newFamilyName || ""}"`;
+  document.getElementById("confirm-family-name").textContent = `"${cachedRequest.newFamilyName || ""}"`;
+  if (cachedRequest.childEmail) {
+    document.getElementById("email").value = cachedRequest.childEmail;
+  }
+  show("login");
+}
+
+function expired(req) {
+  // expiresAt vem como Firestore Timestamp serializado pelo SDK
+  const ts = req.expiresAt;
+  if (!ts) return false;
+  const d = ts.toDate ? ts.toDate() : new Date(ts);
+  return d.getTime() <= Date.now();
+}
+
+document.getElementById("login-btn").addEventListener("click", async () => {
+  const btn = document.getElementById("login-btn");
+  const errBox = document.getElementById("login-error");
+  errBox.classList.add("hidden"); errBox.textContent = "";
+  const email = document.getElementById("email").value.trim().toLowerCase();
+  const password = document.getElementById("password").value;
+  if (!email || !password) return;
+
+  btn.disabled = true;
+  try {
+    const cred = await signInWithEmailAndPassword(auth, email, password);
+    // Após login, busca o doc de novo (regras agora permitem leitura)
+    if (!cachedRequest) {
+      const snap = await getDoc(doc(db, "migrationRequests", requestId));
+      if (!snap.exists()) {
+        await signOut(auth);
+        showError("error_not_found"); return;
+      }
+      cachedRequest = snap.data();
+    }
+    // Valida que o usuário logado é EXATAMENTE a criança da request
+    if (cachedRequest.childUserId !== cred.user.uid) {
+      await signOut(auth);
+      errBox.textContent = (cachedRequest.childEmail && cachedRequest.childEmail !== email)
+        ? t.login_email_mismatch
+        : t.login_user_mismatch;
+      errBox.classList.remove("hidden");
+      return;
+    }
+    document.getElementById("confirm-family-name").textContent = `"${cachedRequest.newFamilyName || ""}"`;
+    show("confirm");
+  } catch (e) {
+    errBox.textContent = t.login_invalid;
+    errBox.classList.remove("hidden");
+  } finally {
+    btn.disabled = false;
+  }
+});
+
+document.getElementById("confirm-btn").addEventListener("click", async () => {
+  const btn = document.getElementById("confirm-btn");
+  const errBox = document.getElementById("confirm-error");
+  errBox.classList.add("hidden"); errBox.textContent = "";
+  btn.disabled = true;
+  try {
+    await updateDoc(doc(db, "migrationRequests", requestId), {
+      confirmedByChild: true
+    });
+    show("success");
+    // Sai depois do sucesso pra não deixar a sessão Firebase persistente
+    // no navegador da criança.
+    await signOut(auth).catch(() => {});
+  } catch (e) {
+    console.error(e);
+    errBox.textContent = t.confirm_failed;
+    errBox.classList.remove("hidden");
+    btn.disabled = false;
+  }
+});
+
+document.getElementById("cancel-btn").addEventListener("click", async () => {
+  await signOut(auth).catch(() => {});
+  show("login");
+});
+</script>
+</body>
+</html>
