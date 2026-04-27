@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <meta name="robots" content="noindex,nofollow"/>
-<title>Confirmar migración de cuenta — Geninho</title>
+<title>Confirm account migration — Geninho</title>
 <style>
   :root {
     --bg: #fbfbfd;
@@ -288,8 +288,8 @@ const I18N = {
   }
 };
 
-// Locale embutido neste arquivo (versão /es/migrate/).
-const DEFAULT_LANG = "es";
+// Locale embutido neste arquivo (versão /en/migrate/).
+const DEFAULT_LANG = "en";
 
 const params = new URLSearchParams(location.search);
 const requestedLang = params.get("lang");
@@ -449,39 +449,34 @@ document.getElementById("confirm-btn").addEventListener("click", async () => {
     stage = "users";
     await setDoc(doc(db, "users", uid), { familyId: newFamilyId }, { merge: true });
 
-    // Lee el doc child existente. Si no existe, lo crea con los defaults
-    // mínimos esperados por el decoder del Child en iOS. Si existe, solo
-    // mergea los campos que cambian en la migración — preserva coins,
-    // streak, name, etc.
+    // Updates/creates the child doc. The iOS Child decoder requires at
+    // least `id`, `name`, `familyId` — missing any of those makes the decode
+    // fail silently and the child disappears from the Family list. We fill
+    // defaults for ANY missing field even if the doc exists (handles the
+    // case of a partially populated doc).
     stage = "children";
     const childRef = doc(db, "children", uid);
     const childSnap = await getDoc(childRef);
-    if (childSnap.exists()) {
-      await setDoc(childRef, {
-        familyId: newFamilyId,
-        schoolId: null,
-        schoolYearPlanId: null
-      }, { merge: true });
-    } else {
-      const userSnap = await getDoc(doc(db, "users", uid));
-      const userName = (userSnap.exists() && userSnap.data().name) || "";
-      await setDoc(childRef, {
-        id: uid,
-        name: userName,
-        grade: "",
-        familyId: newFamilyId,
-        schoolId: null,
-        schoolYearPlanId: null,
-        coins: 0,
-        studyStreak: 0,
-        preferredStudyStartTime: "18:00",
-        preferredStudyDurationMinutes: 45,
-        quizPassingThresholdPercent: 80,
-        allowYoutubeVideos: false,
-        allowChildScheduleCalendarImport: false,
-        allowChildExamCalendarImport: false
-      });
-    }
+    const existing = childSnap.exists() ? (childSnap.data() || {}) : {};
+    const userSnap = await getDoc(doc(db, "users", uid));
+    const userName = (userSnap.exists() && userSnap.data().name) || "";
+    const childPayload = {
+      familyId: newFamilyId,
+      schoolId: null,
+      schoolYearPlanId: null,
+      id: existing.id || uid,
+      name: existing.name || userName,
+      grade: existing.grade ?? "",
+      coins: existing.coins ?? 0,
+      studyStreak: existing.studyStreak ?? 0,
+      preferredStudyStartTime: existing.preferredStudyStartTime ?? "18:00",
+      preferredStudyDurationMinutes: existing.preferredStudyDurationMinutes ?? 45,
+      quizPassingThresholdPercent: existing.quizPassingThresholdPercent ?? 80,
+      allowYoutubeVideos: existing.allowYoutubeVideos ?? false,
+      allowChildScheduleCalendarImport: existing.allowChildScheduleCalendarImport ?? false,
+      allowChildExamCalendarImport: existing.allowChildExamCalendarImport ?? false
+    };
+    await setDoc(childRef, childPayload, { merge: true });
 
     stage = "request";
     await updateDoc(doc(db, "migrationRequests", requestId), {

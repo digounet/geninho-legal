@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="es">
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <meta name="robots" content="noindex,nofollow"/>
-<title>Confirmar migração de conta — Geninho</title>
+<title>Confirmar migración de cuenta — Geninho</title>
 <style>
   :root {
     --bg: #fbfbfd;
@@ -288,8 +288,8 @@ const I18N = {
   }
 };
 
-// Locale embutido neste arquivo — o /en/migrate/ e /es/migrate/ sobrescrevem.
-const DEFAULT_LANG = "pt-BR";
+// Locale embutido neste arquivo (versão /es/migrate/).
+const DEFAULT_LANG = "es";
 
 const params = new URLSearchParams(location.search);
 const requestedLang = params.get("lang");
@@ -446,55 +446,38 @@ document.getElementById("confirm-btn").addEventListener("click", async () => {
     const uid = auth.currentUser.uid;
     const newFamilyId = cachedRequest.newFamilyId;
 
-    // 1. A criança atualiza o PRÓPRIO doc de user (rule: dono pode editar).
-    //    Usa setDoc(merge:true) pra tolerar o doc inexistente — improvável
-    //    mas defensivo.
     stage = "users";
     await setDoc(doc(db, "users", uid), { familyId: newFamilyId }, { merge: true });
 
-    // 2. A criança atualiza o PRÓPRIO doc child (rule: isChildOfUser).
-    //    Limpa escola/ano da família antiga. setDoc(merge:true) cria o doc
-    //    se não existir (cenário possível com legacy invites onde o id do
-    //    Child antigo era diferente do uid).
-    // Lê o doc child existente. Se não existir, criamos com defaults
-    // mínimos (tudo que o decoder do Child espera no app iOS). Se existir,
-    // só fazemos merge dos campos que mudam na migração — preservando
-    // coins, streak, name etc.
+    // Actualiza/crea el doc child. El decoder del Child en iOS exige
+    // al menos `id`, `name`, `familyId` — si falta alguno, el decode
+    // falla en silencio y el hijo desaparece de la lista de Familia.
+    // Rellenamos defaults para CUALQUIER campo ausente, incluso si el doc
+    // ya existe (caso de doc parcialmente poblado).
     stage = "children";
     const childRef = doc(db, "children", uid);
     const childSnap = await getDoc(childRef);
-    if (childSnap.exists()) {
-      await setDoc(childRef, {
-        familyId: newFamilyId,
-        schoolId: null,
-        schoolYearPlanId: null
-      }, { merge: true });
-    } else {
-      // Doc child não existia (caso legacy onde o id do Child antigo era
-      // diferente do uid). Cria do zero com os defaults do app.
-      const userSnap = await getDoc(doc(db, "users", uid));
-      const userName = (userSnap.exists() && userSnap.data().name) || "";
-      await setDoc(childRef, {
-        id: uid,
-        name: userName,
-        grade: "",
-        familyId: newFamilyId,
-        schoolId: null,
-        schoolYearPlanId: null,
-        coins: 0,
-        studyStreak: 0,
-        preferredStudyStartTime: "18:00",
-        preferredStudyDurationMinutes: 45,
-        quizPassingThresholdPercent: 80,
-        allowYoutubeVideos: false,
-        allowChildScheduleCalendarImport: false,
-        allowChildExamCalendarImport: false
-      });
-    }
+    const existing = childSnap.exists() ? (childSnap.data() || {}) : {};
+    const userSnap = await getDoc(doc(db, "users", uid));
+    const userName = (userSnap.exists() && userSnap.data().name) || "";
+    const childPayload = {
+      familyId: newFamilyId,
+      schoolId: null,
+      schoolYearPlanId: null,
+      id: existing.id || uid,
+      name: existing.name || userName,
+      grade: existing.grade ?? "",
+      coins: existing.coins ?? 0,
+      studyStreak: existing.studyStreak ?? 0,
+      preferredStudyStartTime: existing.preferredStudyStartTime ?? "18:00",
+      preferredStudyDurationMinutes: existing.preferredStudyDurationMinutes ?? 45,
+      quizPassingThresholdPercent: existing.quizPassingThresholdPercent ?? 80,
+      allowYoutubeVideos: existing.allowYoutubeVideos ?? false,
+      allowChildScheduleCalendarImport: existing.allowChildScheduleCalendarImport ?? false,
+      allowChildExamCalendarImport: existing.allowChildExamCalendarImport ?? false
+    };
+    await setDoc(childRef, childPayload, { merge: true });
 
-    // 3. Marca a confirmação. O app do pai novo ouve esse campo e finaliza
-    //    o que sobrou (apaga schedules/exams/sessions antigos, adiciona
-    //    childId em families.<new>.childIds, marca status=confirmed).
     stage = "request";
     await updateDoc(doc(db, "migrationRequests", requestId), {
       confirmedByChild: true
