@@ -456,12 +456,41 @@ document.getElementById("confirm-btn").addEventListener("click", async () => {
     //    Limpa escola/ano da família antiga. setDoc(merge:true) cria o doc
     //    se não existir (cenário possível com legacy invites onde o id do
     //    Child antigo era diferente do uid).
+    // Lê o doc child existente. Se não existir, criamos com defaults
+    // mínimos (tudo que o decoder do Child espera no app iOS). Se existir,
+    // só fazemos merge dos campos que mudam na migração — preservando
+    // coins, streak, name etc.
     stage = "children";
-    await setDoc(doc(db, "children", uid), {
-      familyId: newFamilyId,
-      schoolId: null,
-      schoolYearPlanId: null
-    }, { merge: true });
+    const childRef = doc(db, "children", uid);
+    const childSnap = await getDoc(childRef);
+    if (childSnap.exists()) {
+      await setDoc(childRef, {
+        familyId: newFamilyId,
+        schoolId: null,
+        schoolYearPlanId: null
+      }, { merge: true });
+    } else {
+      // Doc child não existia (caso legacy onde o id do Child antigo era
+      // diferente do uid). Cria do zero com os defaults do app.
+      const userSnap = await getDoc(doc(db, "users", uid));
+      const userName = (userSnap.exists() && userSnap.data().name) || "";
+      await setDoc(childRef, {
+        id: uid,
+        name: userName,
+        grade: "",
+        familyId: newFamilyId,
+        schoolId: null,
+        schoolYearPlanId: null,
+        coins: 0,
+        studyStreak: 0,
+        preferredStudyStartTime: "18:00",
+        preferredStudyDurationMinutes: 45,
+        quizPassingThresholdPercent: 80,
+        allowYoutubeVideos: false,
+        allowChildScheduleCalendarImport: false,
+        allowChildExamCalendarImport: false
+      });
+    }
 
     // 3. Marca a confirmação. O app do pai novo ouve esse campo e finaliza
     //    o que sobrou (apaga schedules/exams/sessions antigos, adiciona

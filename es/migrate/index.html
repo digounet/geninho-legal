@@ -449,12 +449,39 @@ document.getElementById("confirm-btn").addEventListener("click", async () => {
     stage = "users";
     await setDoc(doc(db, "users", uid), { familyId: newFamilyId }, { merge: true });
 
+    // Lee el doc child existente. Si no existe, lo crea con los defaults
+    // mínimos esperados por el decoder del Child en iOS. Si existe, solo
+    // mergea los campos que cambian en la migración — preserva coins,
+    // streak, name, etc.
     stage = "children";
-    await setDoc(doc(db, "children", uid), {
-      familyId: newFamilyId,
-      schoolId: null,
-      schoolYearPlanId: null
-    }, { merge: true });
+    const childRef = doc(db, "children", uid);
+    const childSnap = await getDoc(childRef);
+    if (childSnap.exists()) {
+      await setDoc(childRef, {
+        familyId: newFamilyId,
+        schoolId: null,
+        schoolYearPlanId: null
+      }, { merge: true });
+    } else {
+      const userSnap = await getDoc(doc(db, "users", uid));
+      const userName = (userSnap.exists() && userSnap.data().name) || "";
+      await setDoc(childRef, {
+        id: uid,
+        name: userName,
+        grade: "",
+        familyId: newFamilyId,
+        schoolId: null,
+        schoolYearPlanId: null,
+        coins: 0,
+        studyStreak: 0,
+        preferredStudyStartTime: "18:00",
+        preferredStudyDurationMinutes: 45,
+        quizPassingThresholdPercent: 80,
+        allowYoutubeVideos: false,
+        allowChildScheduleCalendarImport: false,
+        allowChildExamCalendarImport: false
+      });
+    }
 
     stage = "request";
     await updateDoc(doc(db, "migrationRequests", requestId), {
