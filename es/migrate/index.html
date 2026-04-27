@@ -442,6 +442,28 @@ document.getElementById("confirm-btn").addEventListener("click", async () => {
   errBox.classList.add("hidden"); errBox.textContent = "";
   btn.disabled = true;
   try {
+    const uid = auth.currentUser.uid;
+    const newFamilyId = cachedRequest.newFamilyId;
+
+    // 1. A criança atualiza o PRÓPRIO doc de user (regras permitem só o
+    //    dono editar `users/{uid}`). Sem isso, ao reabrir o app ela
+    //    continuaria carregando a família antiga.
+    await updateDoc(doc(db, "users", uid), {
+      familyId: newFamilyId
+    });
+
+    // 2. A criança atualiza o PRÓPRIO doc child (regras permitem via
+    //    isChildOfUser). Limpa escola/ano porque pertenciam à família
+    //    antiga e não fazem mais sentido.
+    await updateDoc(doc(db, "children", uid), {
+      familyId: newFamilyId,
+      schoolId: null,
+      schoolYearPlanId: null
+    });
+
+    // 3. Marca a confirmação. O app do pai novo ouve esse campo e finaliza
+    //    o que sobrou (apaga schedules/exams/sessions antigos, adiciona
+    //    childId em families.<new>.childIds, marca status=confirmed).
     await updateDoc(doc(db, "migrationRequests", requestId), {
       confirmedByChild: true
     });
