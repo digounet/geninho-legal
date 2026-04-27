@@ -175,7 +175,7 @@ import {
   getAuth, signInWithEmailAndPassword, signOut
 } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-auth.js";
 import {
-  getFirestore, doc, getDoc, updateDoc
+  getFirestore, doc, getDoc, updateDoc, setDoc
 } from "https://www.gstatic.com/firebasejs/10.13.2/firebase-firestore.js";
 
 // Mesma config Firebase do app iOS (geninho-5d623). Web SDK: API key é
@@ -441,39 +441,30 @@ document.getElementById("confirm-btn").addEventListener("click", async () => {
   const errBox = document.getElementById("confirm-error");
   errBox.classList.add("hidden"); errBox.textContent = "";
   btn.disabled = true;
+  let stage = "init";
   try {
     const uid = auth.currentUser.uid;
     const newFamilyId = cachedRequest.newFamilyId;
 
-    // 1. A criança atualiza o PRÓPRIO doc de user (regras permitem só o
-    //    dono editar `users/{uid}`). Sem isso, ao reabrir o app ela
-    //    continuaria carregando a família antiga.
-    await updateDoc(doc(db, "users", uid), {
-      familyId: newFamilyId
-    });
+    stage = "users";
+    await setDoc(doc(db, "users", uid), { familyId: newFamilyId }, { merge: true });
 
-    // 2. A criança atualiza o PRÓPRIO doc child (regras permitem via
-    //    isChildOfUser). Limpa escola/ano porque pertenciam à família
-    //    antiga e não fazem mais sentido.
-    await updateDoc(doc(db, "children", uid), {
+    stage = "children";
+    await setDoc(doc(db, "children", uid), {
       familyId: newFamilyId,
       schoolId: null,
       schoolYearPlanId: null
-    });
+    }, { merge: true });
 
-    // 3. Marca a confirmação. O app do pai novo ouve esse campo e finaliza
-    //    o que sobrou (apaga schedules/exams/sessions antigos, adiciona
-    //    childId em families.<new>.childIds, marca status=confirmed).
+    stage = "request";
     await updateDoc(doc(db, "migrationRequests", requestId), {
       confirmedByChild: true
     });
     show("success");
-    // Sai depois do sucesso pra não deixar a sessão Firebase persistente
-    // no navegador da criança.
     await signOut(auth).catch(() => {});
   } catch (e) {
-    console.error(e);
-    errBox.textContent = t.confirm_failed;
+    console.error(`[migrate] failed at stage="${stage}":`, e);
+    errBox.textContent = `${t.confirm_failed} (${stage}: ${e.code || e.message || e})`;
     errBox.classList.remove("hidden");
     btn.disabled = false;
   }
